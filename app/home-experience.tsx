@@ -3,9 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CSSProperties, useEffect, useState } from "react";
-import { altitudeStages, climbers, givebutterAccount, givingUrl, impactProjects, products, trailUpdates } from "./campaign-data";
+import { altitudeStages, climbers, givingUrl, impactProjects, products, trailUpdates } from "./campaign-data";
 import LivingImpactVisualizer from "./living-impact-visualizer";
-import { DonationDrawer, Footer, InterestForm, SiteHeader } from "./site-ui";
+import { DonationDrawer, Footer, GivebutterEmbed, InterestForm, SiteHeader } from "./site-ui";
 
 export default function HomeExperience() {
   const [donationOpen, setDonationOpen] = useState(false);
@@ -68,7 +68,7 @@ export default function HomeExperience() {
         </div>
         <div className="hero__metrics hero__metrics--live" aria-label="Live campaign total">
           <span>RAISED · LIVE FROM GIVEBUTTER</span>
-          <givebutter-widget id="gOKyBe" account={givebutterAccount} />
+          <GivebutterEmbed id="gOKyBe" />
           <small>
             OF US$1,000,000 ·{" "}
             <a href={givingUrl} target="_blank" rel="noopener noreferrer">VIEW THE CAMPAIGN <span aria-hidden="true">↗</span></a>
@@ -159,7 +159,9 @@ export default function HomeExperience() {
               </button>
             ))}
             <div className="home-cluster" aria-hidden="true">
-              {Array.from({ length: 12 }, (_, index) => <i key={index} style={{ "--i": index } as CSSProperties} />)}
+              {Array.from({ length: 12 }, (_, index) => (
+                <i key={index} style={{ "--x": index % 4, "--y": Math.floor(index / 4) } as CSSProperties} />
+              ))}
             </div>
           </div>
           <aside className="campus__detail" aria-live="polite">
@@ -198,7 +200,7 @@ export default function HomeExperience() {
           </div>
           <div className="ascent__total">
             <span>TOTAL RAISED</span>
-            <div className="ascent__goal-widget"><givebutter-widget id="gOKyBe" account={givebutterAccount} /></div>
+            <div className="ascent__goal-widget"><GivebutterEmbed id="gOKyBe" /></div>
             <small>OF US$1,000,000</small>
             <div className="ascent__next"><b>NEXT MILESTONE</b><span>[Confirmed funding milestone]</span></div>
           </div>

@@ -1,9 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { givebutterAccount, givingUrl } from "./campaign-data";
 import { saveInterest } from "./supabase";
+
+export function GivebutterEmbed({ id, fallback }: { id: string; fallback?: ReactNode }) {
+  const host = useRef<HTMLSpanElement>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    const started = Date.now();
+    const timer = window.setInterval(() => {
+      const widget = host.current?.querySelector("givebutter-widget");
+      if (widget?.shadowRoot?.textContent?.trim()) {
+        window.clearInterval(timer);
+      } else if (Date.now() - started > 6000) {
+        window.clearInterval(timer);
+        setFailed(true);
+      }
+    }, 800);
+    return () => window.clearInterval(timer);
+  }, [id]);
+
+  if (failed) {
+    return fallback === undefined ? (
+      <a className="gb-fallback" href={givingUrl} target="_blank" rel="noopener noreferrer">
+        LIVE TOTAL ON GIVEBUTTER <span aria-hidden="true">↗</span>
+      </a>
+    ) : (
+      <>{fallback}</>
+    );
+  }
+  return (
+    <span className="gb-slot" ref={host}>
+      <givebutter-widget id={id} account={givebutterAccount} />
+    </span>
+  );
+}
 
 const nav = [
   ["Why We Climb", "/#why"],
@@ -95,10 +129,10 @@ export function DonationDrawer({ open, onClose, climber }: { open: boolean; onCl
         <p>{climber ? `Support ${climber}’s personal climb.` : "Support the team’s US$1 million campaign."}</p>
         <div className="donation-live donation-live--widget">
           <span>CAMPAIGN TOTAL</span>
-          <givebutter-widget id="gOKyBe" account={givebutterAccount} />
+          <GivebutterEmbed id="gOKyBe" />
         </div>
         <div className="donation-widget">
-          <givebutter-widget id="jNKVmq" account={givebutterAccount} />
+          <GivebutterEmbed id="jNKVmq" fallback={null} />
         </div>
         <a className="button button--orange button--wide donation-submit" href={givingUrl} target="_blank" rel="noopener noreferrer">
           Give on Givebutter <span aria-hidden="true">↗</span>

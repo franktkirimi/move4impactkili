@@ -270,11 +270,12 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
 
           <div className="impact-3d-shell" role="img" aria-label={sceneDescription}>
             <div className="impact-3d-toolbar" aria-hidden="true">
-              <span>DRAG TO ORBIT</span>
-              <i />
-              <span>SCROLL TO ZOOM</span>
-              <i />
-              <span>SHIFT + DRAG TO PAN</span>
+              <span className="impact-3d-toolbar__desktop">DRAG TO ORBIT</span>
+              <i className="impact-3d-toolbar__desktop" />
+              <span className="impact-3d-toolbar__desktop">SCROLL TO ZOOM</span>
+              <i className="impact-3d-toolbar__desktop" />
+              <span className="impact-3d-toolbar__desktop">SHIFT + DRAG TO PAN</span>
+              <span className="impact-3d-toolbar__touch">TWO FINGERS TO EXPLORE THE SITE</span>
             </div>
 
             {sceneReady ? (
