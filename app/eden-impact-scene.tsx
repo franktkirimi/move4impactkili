@@ -20,6 +20,7 @@ import {
   Points,
   PointsMaterial,
   SRGBColorSpace,
+  TOUCH,
   Vector3,
 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -949,8 +950,11 @@ const cameraFrames = [
   { position: [15.4, 9.2, 15.8] as VectorTuple, target: [0, 1.8, 0] as VectorTuple },
 ];
 
+const isCoarsePointer = () => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+
 function CameraRig({ reduceMotion, stageIndex }: Pick<SceneProps, "reduceMotion" | "stageIndex">) {
   const controls = useRef<OrbitControlsImpl>(null);
+  const coarse = useMemo(() => isCoarsePointer(), []);
   const { camera } = useThree();
   const [autoOrbit, setAutoOrbit] = useState(!reduceMotion);
   const reframing = useRef(true);
@@ -990,6 +994,7 @@ function CameraRig({ reduceMotion, stageIndex }: Pick<SceneProps, "reduceMotion"
       enablePan
       enableRotate
       enableZoom
+      touches={coarse ? { ONE: -1 as unknown as TOUCH, TWO: TOUCH.DOLLY_ROTATE } : undefined}
       minDistance={7}
       maxDistance={29}
       minPolarAngle={0.35}
@@ -1062,11 +1067,12 @@ function SceneContent({
 }
 
 export default function EdenImpactScene(props: SceneProps) {
-  const [lowQuality, setLowQuality] = useState(false);
+  const coarse = useMemo(() => isCoarsePointer(), []);
+  const [lowQuality, setLowQuality] = useState(coarse);
   return (
     <Canvas
       camera={{ position: [13.5, 8.5, 14], fov: 38, near: 0.1, far: 100 }}
-      dpr={lowQuality ? 1 : [1, 1.55]}
+      dpr={lowQuality ? (coarse ? [1, 1.35] : 1) : [1, 1.55]}
       shadows={{ type: PCFShadowMap }}
       gl={{ antialias: !lowQuality, toneMapping: ACESFilmicToneMapping, outputColorSpace: SRGBColorSpace }}
       onCreated={({ gl }) => { gl.toneMappingExposure = 1.03; }}
