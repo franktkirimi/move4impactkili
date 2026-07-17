@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CSSProperties, useEffect, useState } from "react";
-import { altitudeStages, climbers, impactProjects, products, trailUpdates } from "./campaign-data";
+import { altitudeStages, climbers, givebutterAccount, impactProjects, products, trailUpdates } from "./campaign-data";
+import LivingImpactVisualizer from "./living-impact-visualizer";
 import { DonationDrawer, Footer, InterestForm, SiteHeader } from "./site-ui";
 
 export default function HomeExperience() {
@@ -46,10 +47,11 @@ export default function HomeExperience() {
       <section className="hero" id="top">
         <Image
           className="hero__image"
-          src="/climb-kili-hero.png"
-          alt="A team of climbers ascending a volcanic trail toward Mount Kilimanjaro before sunrise"
+          src="/images/climb-kili-sunrise.png"
+          alt="Three climbers ascending a mountain trail at sunrise"
           fill
           priority
+          unoptimized
           sizes="100vw"
         />
         <div className="hero__veil" />
@@ -69,7 +71,7 @@ export default function HomeExperience() {
           <div><span>CHAMPIONS</span><strong>[Supporters]</strong><small>LIVE COUNT</small></div>
           <div><span>DEPARTURE</span><strong>[Date]</strong><small>CONFIRMED DATE</small></div>
         </div>
-        <div className="hero__caption"><span>ORIGINAL CAMPAIGN VISUAL</span><span>5895 M · TANZANIA</span></div>
+        <div className="hero__caption"><span>THE EXPEDITION · CLIMB KILI 2027</span><span>5895 M · TANZANIA</span></div>
         <a className="scroll-cue" href="#commitment" aria-label="Begin the digital ascent"><span />SCROLL TO ASCEND</a>
       </section>
 
@@ -105,12 +107,18 @@ export default function HomeExperience() {
         </div>
         <div className="parallel-stories">
           <article className="parallel-card parallel-card--athlete">
-            <div className="parallel-card__visual"><span>CAMPAIGN FILM PLACEHOLDER</span><b>STRAP IN.</b></div>
+            <div className="parallel-card__visual">
+              <Image className="parallel-card__image" src="/images/climb-kili-trail.png" alt="A climber moving uphill on a rocky trail" fill sizes="(max-width: 760px) 100vw, 45vw" />
+              <span>EXPEDITION TRAINING</span><b>STRAP IN.</b>
+            </div>
             <p><span>THE ATHLETE</span>Fastens a pack. Takes the next uphill step. Learns to keep moving when the easy answer is to stop.</p>
           </article>
           <div className="parallel-link" aria-hidden="true"><span /><b>ONE<br />MOVEMENT</b><span /></div>
           <article className="parallel-card parallel-card--home">
-            <div className="parallel-card__visual"><span>APPROVED IMPACT MEDIA</span><b>BUILD OUT.</b></div>
+            <div className="parallel-card__visual">
+              <Image className="parallel-card__image" src="/images/eden-homes-aerial.jpg" alt="Aerial view of the Eden campus and family-style homes in Zimbabwe" fill sizes="(max-width: 760px) 100vw, 45vw" />
+              <span>EDEN CAMPUS · ZIMBABWE</span><b>BUILD OUT.</b>
+            </div>
             <p><span>THE HOME</span>A caregiver opens a door. A child begins a school day. Another brick becomes part of a stable future.</p>
           </article>
         </div>
@@ -119,6 +127,8 @@ export default function HomeExperience() {
           <button className="text-link text-link--dark" type="button" onClick={() => setDonationOpen(true)}>Build a home <span aria-hidden="true">↗</span></button>
         </div>
       </section>
+
+      <LivingImpactVisualizer onDonate={() => setDonationOpen(true)} />
 
       <section className="impact section-glacier" id="impact">
         <div className="section-index">03 / THE US$1 MILLION PLAN</div>
@@ -170,7 +180,7 @@ export default function HomeExperience() {
         <div className="ascent__copy">
           <p className="eyebrow eyebrow--orange">LIVE CAMPAIGN MOMENTUM</p>
           <h2>EVERY GIFT<br /><em>MOVES US HIGHER.</em></h2>
-          <p>Fundraising progress becomes altitude, construction progress and visible momentum. This preview waits for the verified campaign feed.</p>
+          <p>Fundraising progress becomes altitude, construction progress and visible momentum. Totals stream live from the verified Givebutter campaign.</p>
           <button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Move us higher <span aria-hidden="true">↗</span></button>
         </div>
         <div className="ascent__route">
@@ -185,7 +195,7 @@ export default function HomeExperience() {
           </div>
           <div className="ascent__total">
             <span>TOTAL RAISED</span>
-            <strong>[Current amount]</strong>
+            <div className="ascent__goal-widget"><givebutter-widget id="gOKyBe" account={givebutterAccount} /></div>
             <small>OF US$1,000,000</small>
             <div className="ascent__next"><b>NEXT MILESTONE</b><span>[Confirmed funding milestone]</span></div>
           </div>
@@ -201,9 +211,10 @@ export default function HomeExperience() {
         <div className="climber-grid">
           {climbers.map((climber, index) => (
             <article className={`climber-card climber-card--${climber.accent}`} key={climber.slug}>
-              <Link href={index === 0 ? `/team/${climber.slug}` : "#team"} className="climber-card__visual" aria-label={`View ${climber.name} profile`}>
+              <Link href={climber.image ? `/team/${climber.slug}` : "#team"} className="climber-card__visual" aria-label={climber.image ? `View ${climber.name} profile` : "Athlete profile publishing soon"}>
+                {climber.image ? <Image className="climber-card__image" src={climber.image} alt={climber.imageAlt ?? `${climber.name} athlete portrait`} fill sizes="(max-width: 760px) 82vw, (max-width: 1100px) 50vw, 25vw" style={{ objectPosition: climber.imagePosition }} /> : null}
                 <span className="climber-card__index">0{index + 1} / 20</span>
-                <span className="climber-card__placeholder">APPROVED<br />ATHLETE<br />PORTRAIT</span>
+                {!climber.image ? <span className="climber-card__placeholder">ATHLETE<br />ANNOUNCEMENT<br />PENDING</span> : null}
                 <b>{climber.name}</b>
               </Link>
               <div className="climber-card__content">
@@ -213,7 +224,7 @@ export default function HomeExperience() {
                   <div><small>RAISED</small><b>{climber.raised}</b></div>
                   <div><small>TRAINED</small><b>{climber.trained}</b></div>
                 </div>
-                {index === 0 ? <Link className="text-link text-link--dark" href={`/team/${climber.slug}`}>Support {climber.name.split(" ")[0]}’s climb <span aria-hidden="true">↗</span></Link> : <span className="text-link text-link--muted">Profile publishing soon</span>}
+                {climber.image ? <Link className="text-link text-link--dark" href={`/team/${climber.slug}`}>View {climber.name.split(" ")[0]}’s climb <span aria-hidden="true">↗</span></Link> : <span className="text-link text-link--muted">Profile publishing soon</span>}
               </div>
             </article>
           ))}
@@ -230,7 +241,16 @@ export default function HomeExperience() {
         <div className="update-grid">
           {trailUpdates.map((update, index) => (
             <article className={`update-card update-card--${index + 1}`} key={update.tag}>
-              <div className="update-card__media"><span>{update.marker}</span><b>{index === 0 ? "15.0" : index === 1 ? "$" : "12"}</b><small>{index === 0 ? "KM" : index === 1 ? "MOMENTUM" : "HOMES"}</small></div>
+              <div className="update-card__media">
+                <Image
+                  className="update-card__image"
+                  src={index === 0 ? "/images/frank-kirimi.jpg" : index === 1 ? "/images/climb-kili-sunrise.png" : "/images/eden-homes-aerial.jpg"}
+                  alt={index === 0 ? "Frank Kirimi training on a trail" : index === 1 ? "Climbers ascending a mountain at sunrise" : "Aerial view of the Eden campus in Zimbabwe"}
+                  fill
+                  sizes="(max-width: 760px) 84vw, 34vw"
+                />
+                <span>{update.marker}</span><b>{index === 0 ? "15.0" : index === 1 ? "$" : "12"}</b><small>{index === 0 ? "KM" : index === 1 ? "MOMENTUM" : "HOMES"}</small>
+              </div>
               <div className="update-card__copy"><span>{update.tag}</span><h3>{update.title}</h3><p>{update.copy}</p><button className="text-link text-link--dark" type="button">Open field note <span aria-hidden="true">↗</span></button></div>
             </article>
           ))}

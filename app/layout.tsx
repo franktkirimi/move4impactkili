@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import Script from "next/script";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,7 +45,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <Script src="https://widgets.givebutter.com/latest.umd.cjs?acct=226906&p=other" strategy="lazyOnload" />
+      </body>
     </html>
   );
 }

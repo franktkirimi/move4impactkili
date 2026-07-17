@@ -9,9 +9,42 @@ export type Climber = {
   elevation: string;
   update: string;
   accent: string;
+  image?: string;
+  imageAlt?: string;
+  imagePosition?: string;
 };
 
 export const climbers: Climber[] = [
+  {
+    slug: "ian-fry",
+    name: "Ian Fry",
+    location: "Move4Impact athlete",
+    reason: "Personal story and fundraising target publishing soon.",
+    target: "[Personal target]",
+    raised: "[Amount raised]",
+    trained: "[KM trained]",
+    elevation: "[Elevation gained]",
+    update: "[Latest verified training update]",
+    accent: "orange",
+    image: "/images/ian-fry.jpg",
+    imageAlt: "Ian Fry wearing an Eden Ministries training shirt outdoors",
+    imagePosition: "50% 42%",
+  },
+  {
+    slug: "skylar-fingerle",
+    name: "Skylar Fingerle",
+    location: "Move4Impact athlete",
+    reason: "Personal story and fundraising target publishing soon.",
+    target: "[Personal target]",
+    raised: "[Amount raised]",
+    trained: "[KM trained]",
+    elevation: "[Elevation gained]",
+    update: "[Latest verified training update]",
+    accent: "blue",
+    image: "/images/skylar-fingerle.jpg",
+    imageAlt: "Skylar Fingerle training with trekking poles and a backpack",
+    imagePosition: "50% 42%",
+  },
   {
     slug: "frank-kirimi",
     name: "Frank Kirimi",
@@ -22,31 +55,10 @@ export const climbers: Climber[] = [
     trained: "[KM trained]",
     elevation: "[Elevation gained]",
     update: "[Latest verified training update]",
-    accent: "orange",
-  },
-  {
-    slug: "climber-02",
-    name: "[Climber 02]",
-    location: "[City, country]",
-    reason: "[Approved personal reason for climbing]",
-    target: "[Personal target]",
-    raised: "[Amount raised]",
-    trained: "[KM trained]",
-    elevation: "[Elevation gained]",
-    update: "[Latest verified training update]",
-    accent: "blue",
-  },
-  {
-    slug: "climber-03",
-    name: "[Climber 03]",
-    location: "[City, country]",
-    reason: "[Approved personal reason for climbing]",
-    target: "[Personal target]",
-    raised: "[Amount raised]",
-    trained: "[KM trained]",
-    elevation: "[Elevation gained]",
-    update: "[Latest verified training update]",
     accent: "grey",
+    image: "/images/frank-kirimi.jpg",
+    imageAlt: "Frank Kirimi smiling during trail training in Zimbabwe",
+    imagePosition: "50% 50%",
   },
   {
     slug: "climber-04",
@@ -153,3 +165,7 @@ export const altitudeStages = [
   ["4,600 m", "The challenge intensifies"],
   ["5,895 m", "The summit"],
 ] as const;
+
+/** Verified Givebutter campaign for Move4Impact · Kilimanjaro 2027 (Eden Ministries Inc). */
+export const givingUrl = "https://givebutter.com/kilimanjaro2027";
+export const givebutterAccount = "226906";

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { climbers } from "../../campaign-data";
@@ -18,12 +19,17 @@ export default async function ClimberPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const climber = climbers.find((item) => item.slug === slug);
   if (!climber) notFound();
+  const climberIndex = climbers.findIndex((item) => item.slug === slug);
+  const nextClimber = climbers.slice(climberIndex + 1).find((item) => item.image) ?? climbers.find((item) => item.image && item.slug !== slug);
 
   return (
     <RouteShell climber={climber.name}>
       <header className="athlete-hero">
-        <div className="athlete-hero__portrait"><span>APPROVED<br />ATHLETE<br />PORTRAIT</span><b>01 / 20</b></div>
-        <div className="athlete-hero__copy"><p className="eyebrow eyebrow--orange">CLIMBER · KILIMANJARO 2027</p><h1>{climber.name.toUpperCase()}</h1><span>{climber.location}</span><blockquote>“{climber.reason}”</blockquote><a className="button button--orange" href="#support-frank">Support {climber.name.split(" ")[0]}’s climb <span aria-hidden="true">↓</span></a></div>
+        <div className="athlete-hero__portrait">
+          {climber.image ? <Image className="athlete-hero__image" src={climber.image} alt={climber.imageAlt ?? `${climber.name} athlete portrait`} fill priority sizes="(max-width: 760px) 100vw, 55vw" style={{ objectPosition: climber.imagePosition }} /> : <span>ATHLETE<br />ANNOUNCEMENT<br />PENDING</span>}
+          <b>0{climberIndex + 1} / 20</b>
+        </div>
+        <div className="athlete-hero__copy"><p className="eyebrow eyebrow--orange">CLIMBER · KILIMANJARO 2027</p><h1>{climber.name.toUpperCase()}</h1><span>{climber.location}</span><blockquote>“{climber.reason}”</blockquote><a className="button button--orange" href={`#support-${climber.slug}`}>Support {climber.name.split(" ")[0]}’s climb <span aria-hidden="true">↓</span></a></div>
         <div className="athlete-hero__data"><span>PERSONAL CAMPAIGN</span><strong>{climber.raised}</strong><small>OF {climber.target}</small><div className="placeholder-progress"><i /></div><em>Verified personal feed connects here</em></div>
       </header>
 
@@ -40,9 +46,9 @@ export default async function ClimberPage({ params }: { params: Promise<{ slug: 
 
       <section className="route-section supporters"><div className="section-index">03 / SUPPORTER MESSAGES</div><h2>THE TEAM<br /><em>BEHIND THE CLIMBER.</em></h2><div className="supporter-grid"><blockquote>“[Approved supporter message]”<cite>— [Supporter name]</cite></blockquote><blockquote>“[Approved supporter message]”<cite>— [Supporter name]</cite></blockquote><div className="fake-qr fake-qr--dark">M4I<br />QR</div></div></section>
 
-      <section className="route-section route-section--orange athlete-support" id="support-frank"><div><p className="eyebrow">PERSONAL CAMPAIGN</p><h2>MOVE {climber.name.split(" ")[0].toUpperCase()}<br /><em>HIGHER.</em></h2><p>Choose the personal campaign on the verified donation panel once the fundraising link is live.</p></div><div><span>SHARE THIS CLIMB</span><p>[Personal campaign URL]</p><button className="button button--dark" type="button" disabled>Donation link pending</button></div></section>
+      <section className="route-section route-section--orange athlete-support" id={`support-${climber.slug}`}><div><p className="eyebrow">PERSONAL CAMPAIGN</p><h2>MOVE {climber.name.split(" ")[0].toUpperCase()}<br /><em>HIGHER.</em></h2><p>Choose the personal campaign on the verified donation panel once the fundraising link is live.</p></div><div><span>SHARE THIS CLIMB</span><p>[Personal campaign URL]</p><button className="button button--dark" type="button" disabled>Donation link pending</button></div></section>
 
-      <nav className="next-athlete" aria-label="Team navigation"><Link href="/#team">← Back to the team</Link><span>NEXT CLIMBER</span><b>[Climber 02] →</b></nav>
+      <nav className="next-athlete" aria-label="Team navigation"><Link href="/#team">← Back to the team</Link><span>NEXT CLIMBER</span>{nextClimber ? <Link href={`/team/${nextClimber.slug}`}>{nextClimber.name} →</Link> : <b>Roster publishing soon</b>}</nav>
     </RouteShell>
   );
 }

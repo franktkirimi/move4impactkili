@@ -3,9 +3,10 @@ import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } fr
 import handler from "vinext/server/app-router-entry";
 
 interface Env {
-  ASSETS: Fetcher;
+  // ASSETS and IMAGES are injected in production; local dev runs without them.
+  ASSETS?: Fetcher;
   DB: D1Database;
-  IMAGES: {
+  IMAGES?: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
         output(options: { format: string; quality: number }): Promise<{ response(): Response }>;
@@ -31,12 +32,22 @@ const worker = {
 
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
+      const images = env.IMAGES;
       return handleImageOptimization(request, {
-        fetchAsset: (path) => env.ASSETS.fetch(new Request(new URL(path, request.url))),
-        transformImage: async (body, { width, format, quality }) => {
-          const result = await env.IMAGES.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
-          return result.response();
+        fetchAsset: (path) => {
+          const assetUrl = new URL(path, request.url);
+          // In local dev the ASSETS binding is not injected; fall back to
+          // fetching the asset from the dev server directly.
+          return env.ASSETS ? env.ASSETS.fetch(new Request(assetUrl)) : fetch(assetUrl);
         },
+        // The Images binding only exists in production; without it the
+        // handler falls back to serving the original file.
+        transformImage: images
+          ? async (body, { width, format, quality }) => {
+              const result = await images.input(body).transform(width > 0 ? { width } : {}).output({ format, quality });
+              return result.response();
+            }
+          : undefined,
       }, allowedWidths);
     }
 

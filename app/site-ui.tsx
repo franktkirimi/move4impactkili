@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
+import { givebutterAccount, givingUrl } from "./campaign-data";
+import { saveInterest } from "./supabase";
 
 const nav = [
   ["Why We Climb", "/#why"],
@@ -71,9 +73,6 @@ export function SiteHeader({ onSupport, inverse = false }: { onSupport?: () => v
 }
 
 export function DonationDrawer({ open, onClose, climber }: { open: boolean; onClose: () => void; climber?: string }) {
-  const [frequency, setFrequency] = useState<"once" | "monthly">("once");
-  const [amount, setAmount] = useState("100");
-
   useEffect(() => {
     if (!open) return;
     const close = (event: KeyboardEvent) => event.key === "Escape" && onClose();
@@ -94,47 +93,57 @@ export function DonationDrawer({ open, onClose, climber }: { open: boolean; onCl
         <div className="eyebrow eyebrow--orange">MOVE US HIGHER</div>
         <h2 id="donation-title">TURN A GIFT<br />INTO ALTITUDE.</h2>
         <p>{climber ? `Support ${climber}’s personal climb.` : "Support the team’s US$1 million campaign."}</p>
-        <div className="donation-live">
+        <div className="donation-live donation-live--widget">
           <span>CAMPAIGN TOTAL</span>
-          <strong>[Current amount raised]</strong>
-          <small>Verified live total will connect here.</small>
+          <givebutter-widget id="gOKyBe" account={givebutterAccount} />
         </div>
-        <div className="segmented" aria-label="Donation frequency">
-          <button className={frequency === "once" ? "active" : ""} onClick={() => setFrequency("once")}>One time</button>
-          <button className={frequency === "monthly" ? "active" : ""} onClick={() => setFrequency("monthly")}>Monthly</button>
+        <div className="donation-widget">
+          <givebutter-widget id="jNKVmq" account={givebutterAccount} />
         </div>
-        <div className="amounts" aria-label="Choose an amount">
-          {["50", "100", "250"].map((value) => (
-            <button className={amount === value ? "active" : ""} key={value} onClick={() => setAmount(value)}>US${value}</button>
-          ))}
-          <button className={amount === "custom" ? "active" : ""} onClick={() => setAmount("custom")}>Other</button>
-        </div>
-        <button className="button button--orange button--wide donation-submit" type="button" disabled>
-          Verified checkout link pending
-        </button>
-        <p className="drawer-note">Payment processing will open on the campaign’s verified fundraising platform. No payment details are collected by this preview.</p>
+        <a className="button button--orange button--wide donation-submit" href={givingUrl} target="_blank" rel="noopener noreferrer">
+          Give on Givebutter <span aria-hidden="true">↗</span>
+        </a>
+        <p className="drawer-note">
+          Checkout is handled securely by Givebutter, the campaign’s verified fundraising platform. No payment details are collected by this site.{" "}
+          <a href={givingUrl} target="_blank" rel="noopener noreferrer">Open the full campaign page <span aria-hidden="true">↗</span></a>
+        </p>
       </aside>
     </div>
   );
 }
 
 export function InterestForm({ kind = "campaign kit" }: { kind?: string }) {
-  const [sent, setSent] = useState(false);
-  function submit(event: FormEvent<HTMLFormElement>) {
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSent(true);
+    const email = new FormData(event.currentTarget).get("email");
+    if (typeof email !== "string" || !email) return;
+    setStatus("sending");
+    try {
+      await saveInterest(email, kind);
+      setStatus("sent");
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
   }
 
-  if (sent) {
-    return <div className="form-success" role="status"><span>✓</span> Interest noted in this prototype. Connect the final form endpoint before launch.</div>;
+  if (status === "sent") {
+    return <div className="form-success" role="status"><span>✓</span> You’re on the list. We’ll email you when the {kind} is ready.</div>;
   }
   return (
     <form className="interest-form" onSubmit={submit}>
       <label>
         <span>Email address</span>
-        <input type="email" name="email" placeholder="you@example.com" required />
+        <input type="email" name="email" placeholder="you@example.com" required disabled={status === "sending"} />
       </label>
-      <button className="button button--orange" type="submit">Reserve {kind} <span aria-hidden="true">↗</span></button>
+      <button className="button button--orange" type="submit" disabled={status === "sending"}>
+        {status === "sending" ? "Reserving…" : <>Reserve {kind} <span aria-hidden="true">↗</span></>}
+      </button>
+      {status === "error" && (
+        <p className="form-error" role="alert">Something went wrong — please try again in a moment.</p>
+      )}
     </form>
   );
 }

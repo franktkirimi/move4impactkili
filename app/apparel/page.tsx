@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { products } from "../campaign-data";
 import RouteShell from "../route-shell";
 import { InterestForm } from "../site-ui";
@@ -12,7 +13,11 @@ export default function ApparelPage() {
   return (
     <RouteShell>
       <header className="route-hero route-hero--apparel">
-        <div className="apparel-figure" aria-hidden="true"><span>5895</span><i /></div>
+        <div className="apparel-figure">
+          <Image className="apparel-figure__image" src="/images/hiking-boots.png" alt="Expedition hiking boots with mountains behind them" fill priority sizes="(max-width: 760px) 72vw, 52vw" />
+          <span>5895</span>
+          <small>EXPEDITION FIELD GEAR</small>
+        </div>
         <p className="eyebrow eyebrow--orange">THE CLIMB KILI KIT</p>
         <h1>WEAR THE<br /><em>MOVEMENT.</em></h1>
         <p>Performance-minded campaign clothing designed to be desirable on its own—and meaningful because of what it helps move forward.</p>
