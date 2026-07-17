@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CSSProperties, useEffect, useState } from "react";
-import { altitudeStages, climbers, givebutterAccount, impactProjects, products, trailUpdates } from "./campaign-data";
+import { altitudeStages, climbers, givebutterAccount, givingUrl, impactProjects, products, trailUpdates } from "./campaign-data";
 import LivingImpactVisualizer from "./living-impact-visualizer";
 import { DonationDrawer, Footer, InterestForm, SiteHeader } from "./site-ui";
 
@@ -66,10 +66,13 @@ export default function HomeExperience() {
             <Link className="text-link" href="/apparel">Wear the movement <span aria-hidden="true">↗</span></Link>
           </div>
         </div>
-        <div className="hero__metrics" aria-label="Campaign statistics">
-          <div><span>RAISED</span><strong>[Current amount]</strong><small>OF US$1M</small></div>
-          <div><span>CHAMPIONS</span><strong>[Supporters]</strong><small>LIVE COUNT</small></div>
-          <div><span>DEPARTURE</span><strong>[Date]</strong><small>CONFIRMED DATE</small></div>
+        <div className="hero__metrics hero__metrics--live" aria-label="Live campaign total">
+          <span>RAISED · LIVE FROM GIVEBUTTER</span>
+          <givebutter-widget id="gOKyBe" account={givebutterAccount} />
+          <small>
+            OF US$1,000,000 ·{" "}
+            <a href={givingUrl} target="_blank" rel="noopener noreferrer">VIEW THE CAMPAIGN <span aria-hidden="true">↗</span></a>
+          </small>
         </div>
         <div className="hero__caption"><span>THE EXPEDITION · CLIMB KILI 2027</span><span>5895 M · TANZANIA</span></div>
         <a className="scroll-cue" href="#commitment" aria-label="Begin the digital ascent"><span />SCROLL TO ASCEND</a>
