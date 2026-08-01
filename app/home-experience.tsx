@@ -126,24 +126,20 @@ export default function HomeExperience() {
         </div>
       </section>
 
-      <section className="ascent section-dark" id="transparency">
-        <div className="section-index">04 / PROGRESS & TRANSPARENCY</div>
-        <div className="ascent__copy">
-          <p className="eyebrow eyebrow--orange">PUBLIC GIFTS FUND THE MISSION</p>
-          <h2>EVERY GIFT.<br /><em>ACCOUNTED FOR.</em></h2>
-          <p>Athletes cover direct travel and expedition costs themselves or through separate sponsorships. Public peer-to-peer donations go to Eden Ministries rather than paying for the climb.</p>
-          <a className="button button--orange" href={givingUrl} target="_blank" rel="noopener noreferrer">View verified campaign</a>
-          <details className="ascent__mobile-details">
-            <summary>How donations work</summary>
-            <p>Athletes cover direct travel and expedition costs themselves or through separate sponsorships. Public peer-to-peer donations go to Eden Ministries rather than paying for the climb.</p>
-            <a href={givingUrl} target="_blank" rel="noopener noreferrer">View verified campaign</a>
-          </details>
+      <section className="ascent section-dark" id="transparency" style={{ background: "#141728" }}>
+        <div className="ascent__intro">
+          <h2>WATCH VIDEO BELOW</h2>
+          <p>Meet the people, purpose and shared commitment behind every step toward twelve safe, loving homes.</p>
         </div>
-        <div className="ascent__total">
-          <span>LIVE CAMPAIGN TOTAL</span>
-          <div className="ascent__goal-widget"><GivebutterEmbed /></div>
-          <small>OF US$1,000,000</small>
-          <div className="ascent__next"><b>CAMPAIGN STRUCTURE</b><span>20 athletes · US$50K target each</span></div>
+        <div className="ascent__video">
+          <iframe
+            src="https://www.youtube.com/embed/0SONMx6nn80?playsinline=1&rel=0"
+            title="Move4Impact and Eden Ministries campaign video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            loading="lazy"
+            allowFullScreen
+          />
         </div>
       </section>
 
