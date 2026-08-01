@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { givebutterAccount, givingUrl } from "./campaign-data";
-import { saveInterest } from "./supabase";
 
 export function GivebutterEmbed({ id, fallback }: { id: string; fallback?: ReactNode }) {
   const host = useRef<HTMLSpanElement>(null);
@@ -40,12 +39,10 @@ export function GivebutterEmbed({ id, fallback }: { id: string; fallback?: React
 }
 
 const nav = [
-  ["Why We Climb", "/#why"],
-  ["The Team", "/#team"],
-  ["Impact", "/impact"],
-  ["Wear the Movement", "/apparel"],
-  ["Updates", "/#updates"],
-  ["Partners", "/#partners"],
+  ["The Expedition", "/#challenge"],
+  ["Why We Climb", "/#mission"],
+  ["Climbers", "/#team"],
+  ["Transparency", "/#transparency"],
 ] as const;
 
 export function Mark({ inverse = false }: { inverse?: boolean }) {
@@ -146,42 +143,6 @@ export function DonationDrawer({ open, onClose, climber }: { open: boolean; onCl
   );
 }
 
-export function InterestForm({ kind = "campaign kit" }: { kind?: string }) {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const email = new FormData(event.currentTarget).get("email");
-    if (typeof email !== "string" || !email) return;
-    setStatus("sending");
-    try {
-      await saveInterest(email, kind);
-      setStatus("sent");
-    } catch (error) {
-      console.error(error);
-      setStatus("error");
-    }
-  }
-
-  if (status === "sent") {
-    return <div className="form-success" role="status"><span>✓</span> You’re on the list. We’ll email you when the {kind} is ready.</div>;
-  }
-  return (
-    <form className="interest-form" onSubmit={submit}>
-      <label>
-        <span>Email address</span>
-        <input type="email" name="email" placeholder="you@example.com" required disabled={status === "sending"} />
-      </label>
-      <button className="button button--orange" type="submit" disabled={status === "sending"}>
-        {status === "sending" ? "Reserving…" : <>Reserve {kind} <span aria-hidden="true">↗</span></>}
-      </button>
-      {status === "error" && (
-        <p className="form-error" role="alert">Something went wrong — please try again in a moment.</p>
-      )}
-    </form>
-  );
-}
-
 export function Footer() {
   return (
     <footer className="footer">
@@ -191,16 +152,16 @@ export function Footer() {
           <p>Twenty athletes. One mountain.<br />Twelve new homes.</p>
         </div>
         <div className="footer__links">
-          <Link href="/#why">Why we climb</Link>
+          <Link href="/#mission">Why we climb</Link>
           <Link href="/#team">The team</Link>
-          <Link href="/impact">Impact</Link>
-          <Link href="/apparel">Campaign kit</Link>
+          <Link href="/#transparency">Transparency</Link>
+          <a href={givingUrl} target="_blank" rel="noopener noreferrer">Donate</a>
         </div>
         <div className="footer__links">
-          <a href="mailto:[campaign-email]">[Campaign email]</a>
-          <span>[Instagram]</span>
-          <span>[YouTube]</span>
-          <span>[LinkedIn]</span>
+          <a href="mailto:news@eden-ministries.org">news@eden-ministries.org</a>
+          <a href="https://eden-ministries.org/" target="_blank" rel="noopener noreferrer">Eden Ministries</a>
+          <a href="https://www.linkedin.com/company/eden-ministries" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href={givingUrl} target="_blank" rel="noopener noreferrer">Givebutter</a>
         </div>
       </div>
       <div className="footer__bottom">
