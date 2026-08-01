@@ -47,7 +47,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
-        <Script src="https://widgets.givebutter.com/latest.umd.cjs?acct=226906&p=other" strategy="lazyOnload" />
+        <Script src="https://widgets.givebutter.com/latest.umd.cjs?acct=226906&p=other" strategy="afterInteractive" />
       </body>
     </html>
   );

@@ -119,6 +119,7 @@ const hotspotCopy: Record<ImpactHotspot, { label: string; title: string; detail:
 };
 
 const formatAmount = (amount: number) => `$${amount.toLocaleString("en-US")}`;
+const quickAmounts = [100, 500, 1000, 5000] as const;
 
 export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => void }) {
   const [stageIndex, setStageIndex] = useState(4);
@@ -183,7 +184,6 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
       <div className="impact-experience impact-experience--3d">
         <div className="impact-controls">
           <div className="impact-controls__amount">
-            <span>YOUR POTENTIAL GIFT</span>
             <AnimatePresence mode="wait" initial={false}>
               <motion.strong
                 key={stage.amount}
@@ -195,15 +195,13 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
                 {formatAmount(stage.amount)}
               </motion.strong>
             </AnimatePresence>
-            <small>STAGE {String(stageIndex + 1).padStart(2, "0")} / {stages.length}</small>
+            <b>{stage.label}</b>
           </div>
 
-          <label className="impact-range__label" htmlFor="impact-donation-range">
-            <span>Move to build</span><b>{stage.label}</b>
-          </label>
           <div className="impact-range" style={{ "--impact-progress": `${progress}%` } as CSSProperties}>
             <input
               id="impact-donation-range"
+              aria-label="Choose a potential gift amount"
               type="range"
               min="0"
               max={stages.length - 1}
@@ -215,17 +213,15 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
             <span aria-hidden="true" />
           </div>
 
-          <div className="impact-presets impact-presets--twelve" aria-label="Choose a donation amount">
-            {stages.map((item, index) => (
-              <button
-                key={item.amount}
-                type="button"
-                aria-pressed={stageIndex === index}
-                onClick={() => selectStage(index)}
-              >
-                {formatAmount(item.amount)}
-              </button>
-            ))}
+          <div className="impact-presets" aria-label="Suggested donation amounts">
+            {quickAmounts.map((amount) => {
+              const index = stages.findIndex((item) => item.amount === amount);
+              return (
+                <button key={amount} type="button" aria-pressed={stageIndex === index} onClick={() => selectStage(index)}>
+                  {formatAmount(amount)}
+                </button>
+              );
+            })}
           </div>
 
           <div className="impact-story" aria-live="polite" aria-atomic="true">
@@ -237,7 +233,6 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
                 exit={{ opacity: 0, x: reduceMotion ? 0 : 14 }}
                 transition={{ duration: reduceMotion ? 0 : 0.35 }}
               >
-                <span>{stage.label}</span>
                 <h3>{stage.title}</h3>
                 <p>{stage.detail}</p>
               </motion.div>
@@ -253,9 +248,8 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
                 exit={{ opacity: 0 }}
                 transition={{ duration: reduceMotion ? 0 : 0.4 }}
               >
-                <p>This is the difference your generosity can make.</p>
                 <button className="button button--orange" type="button" onClick={onDonate}>
-                  Help turn it into reality <span aria-hidden="true">↗</span>
+                  Help build a home
                 </button>
               </motion.div>
             )}
@@ -265,17 +259,12 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
         <div className="impact-visual impact-visual--3d">
           <div className="impact-visual__meta">
             <span>EDEN CAMPUS · ZIMBABWE</span>
-            <b>REAL-TIME ARCHITECTURAL MODEL</b>
           </div>
 
           <div className="impact-3d-shell" role="img" aria-label={sceneDescription}>
             <div className="impact-3d-toolbar" aria-hidden="true">
-              <span className="impact-3d-toolbar__desktop">DRAG TO ORBIT</span>
-              <i className="impact-3d-toolbar__desktop" />
-              <span className="impact-3d-toolbar__desktop">SCROLL TO ZOOM</span>
-              <i className="impact-3d-toolbar__desktop" />
-              <span className="impact-3d-toolbar__desktop">SHIFT + DRAG TO PAN</span>
-              <span className="impact-3d-toolbar__touch">TWO FINGERS TO EXPLORE THE SITE</span>
+              <span className="impact-3d-toolbar__desktop">DRAG TO EXPLORE</span>
+              <span className="impact-3d-toolbar__touch">TWO FINGERS TO EXPLORE</span>
             </div>
 
             {sceneReady ? (
@@ -295,7 +284,6 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
 
             {availableHotspots.length > 0 && (
               <div className="impact-hotspot-menu" aria-label="Explore the home">
-                <span>EXPLORE</span>
                 {availableHotspots.map((key) => (
                   <button
                     key={key}
@@ -327,17 +315,12 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
               )}
             </AnimatePresence>
 
-            <div className="impact-3d-status" aria-hidden="true">
-              <span>{String(stageIndex + 1).padStart(2, "0")}</span>
-              <div><i style={{ width: `${progress}%` }} /></div>
-              <b>{stage.label}</b>
-            </div>
           </div>
 
-          <div className="impact-disclaimer">
-            <span>INTERACTIVE 3D VISION</span>
+          <details className="impact-disclaimer">
+            <summary>ABOUT THIS MODEL</summary>
             <p>Architectural visualisation of a family-style Eden children’s home. Final design and allocation of funds may vary according to local needs.</p>
-          </div>
+          </details>
         </div>
       </div>
     </section>

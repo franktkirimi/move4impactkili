@@ -39,21 +39,22 @@ export default function HomeExperience() {
       </aside>
 
       <section className="hero" id="top">
-        <Image className="hero__image" src="/images/climb-kili-sunrise.png" alt="Three climbers ascending a mountain trail at sunrise" fill priority unoptimized sizes="100vw" />
+        <Image className="hero__image" src="/images/hero-belong-home.jpg" alt="A caregiver and child walking toward a warmly lit family home" fill priority sizes="100vw" />
         <div className="hero__veil" />
         <div className="topo topo--hero" aria-hidden="true" />
         <div className="hero__content">
           <p className="eyebrow eyebrow--orange">MOVE4IMPACT · KILIMANJARO 2027</p>
-          <h1>CLIMB A<br />MOUNTAIN.<br /><em>BUILD A HOME.</em></h1>
+          <h1>EVERY STEP.<br />EVERY GIFT.<br /><em>A PLACE TO BELONG.</em></h1>
           <p className="hero__copy">Twenty athletes. A marathon and an eight-day ascent. One US$1 million mission to help build twelve family-style homes in Zimbabwe.</p>
           <div className="hero__actions">
-            <button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Support the climb <span aria-hidden="true">↗</span></button>
-            <a className="button button--ghost" href="#mission">Why we climb <span aria-hidden="true">↓</span></a>
+            <button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Help build a home</button>
+            <a className="button button--ghost" href="#mission">Why we climb</a>
           </div>
+          <a className="hero__mobile-progress" href={givingUrl} target="_blank" rel="noopener noreferrer">View live campaign progress</a>
         </div>
         <div className="hero__metrics hero__metrics--live" aria-label="Live campaign total">
           <span>RAISED · LIVE FROM GIVEBUTTER</span>
-          <GivebutterEmbed id="gOKyBe" />
+          <GivebutterEmbed />
           <small>OF US$1,000,000 · <a href={givingUrl} target="_blank" rel="noopener noreferrer">VIEW CAMPAIGN ↗</a></small>
         </div>
         <div className="hero__caption"><span>LEMOSHO ROUTE · MARCH 2027</span><span>5,895 M · TANZANIA</span></div>
@@ -65,7 +66,7 @@ export default function HomeExperience() {
         <div className="challenge__number">5,895<span>M</span></div>
         <div className="challenge__body">
           <p className="eyebrow eyebrow--blue">THE ROOF OF AFRICA</p>
-          <h2>RUN AT THE BASE.<br />CLIMB TO<br /><em>THE SUMMIT.</em></h2>
+          <h2>RUN AT THE BASE.<br /><em>CLIMB TO<br />THE SUMMIT.</em></h2>
           <p>On 21 March 2027, the team takes on the Kilimanjaro Marathon. The next day, the eight-day Lemosho ascent begins—through five climate zones toward an Easter Sunday summit.</p>
         </div>
         <div className="challenge__data">
@@ -82,20 +83,21 @@ export default function HomeExperience() {
           <p className="eyebrow">THE TRUE DESTINATION</p>
           <h2>THE SUMMIT IS NOT<br />THE DESTINATION.<br /><em>HOME IS.</em></h2>
         </div>
+        <p className="why__context">Eden Ministries creates family-style homes in Zimbabwe where children receive consistent care, education, stability and a lasting place to belong.</p>
         <div className="parallel-stories">
           <article className="parallel-card parallel-card--athlete">
-            <div className="parallel-card__visual"><Image className="parallel-card__image" src="/images/climb-kili-trail.png" alt="A climber moving uphill on a rocky trail" fill sizes="(max-width: 760px) 100vw, 45vw" /><span>THE EXPEDITION</span><b>ENDURE.</b></div>
+            <div className="parallel-card__visual"><Image className="parallel-card__image" src="/images/move4impact-real-trail.jpg" alt="Move4Impact runners and a cyclist moving together on a woodland trail" fill sizes="(max-width: 760px) 100vw, 45vw" /><span>REAL MOVEMENT · ZIMBABWE</span><b>ENDURE.</b></div>
             <p><span>THE ATHLETE</span>Trains, climbs and invites a community to move toward something larger than a summit.</p>
           </article>
           <div className="parallel-link" aria-hidden="true"><span /><b>ONE<br />MOVEMENT</b><span /></div>
           <article className="parallel-card parallel-card--home">
-            <div className="parallel-card__visual"><Image className="parallel-card__image" src="/images/eden-homes-aerial.jpg" alt="Aerial view of the Eden campus and family-style homes in Zimbabwe" fill sizes="(max-width: 760px) 100vw, 45vw" /><span>EDEN · ZIMBABWE</span><b>BELONG.</b></div>
+            <div className="parallel-card__visual"><Image className="parallel-card__image" src="/images/eden-belong-children.jpg" alt="Children laughing together outside a family-style home in Zimbabwe" fill sizes="(max-width: 760px) 100vw, 45vw" /><span>EDEN · ZIMBABWE</span><b>BELONG.</b></div>
             <p><span>THE HOME</span>A place for consistent care, school mornings, shared meals and the ordinary confidence of belonging.</p>
           </article>
         </div>
         <div className="why__manifesto">
-          <p>Every gift helps move Eden Ministries toward twelve new family-style homes—built around dignity, care and long-term opportunity.</p>
-          <button className="text-link text-link--dark" type="button" onClick={() => setDonationOpen(true)}>Help build home ↗</button>
+          <p>Every gift helps build twelve safe, loving homes where children can belong and thrive.</p>
+          <button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Help build a home</button>
         </div>
       </section>
 
@@ -130,11 +132,16 @@ export default function HomeExperience() {
           <p className="eyebrow eyebrow--orange">PUBLIC GIFTS FUND THE MISSION</p>
           <h2>EVERY GIFT.<br /><em>ACCOUNTED FOR.</em></h2>
           <p>Athletes cover direct travel and expedition costs themselves or through separate sponsorships. Public peer-to-peer donations go to Eden Ministries rather than paying for the climb.</p>
-          <a className="button button--orange" href={givingUrl} target="_blank" rel="noopener noreferrer">View verified campaign ↗</a>
+          <a className="button button--orange" href={givingUrl} target="_blank" rel="noopener noreferrer">View verified campaign</a>
+          <details className="ascent__mobile-details">
+            <summary>How donations work</summary>
+            <p>Athletes cover direct travel and expedition costs themselves or through separate sponsorships. Public peer-to-peer donations go to Eden Ministries rather than paying for the climb.</p>
+            <a href={givingUrl} target="_blank" rel="noopener noreferrer">View verified campaign</a>
+          </details>
         </div>
         <div className="ascent__total">
           <span>LIVE CAMPAIGN TOTAL</span>
-          <div className="ascent__goal-widget"><GivebutterEmbed id="gOKyBe" /></div>
+          <div className="ascent__goal-widget"><GivebutterEmbed /></div>
           <small>OF US$1,000,000</small>
           <div className="ascent__next"><b>CAMPAIGN STRUCTURE</b><span>20 athletes · US$50K target each</span></div>
         </div>
@@ -146,10 +153,11 @@ export default function HomeExperience() {
         <p className="eyebrow eyebrow--orange">5,895 M → HOME</p>
         <h2>THE SUMMIT IS<br />A MILESTONE.<br /><em>THE HOMES ARE<br />THE VICTORY.</em></h2>
         <p>Help turn twenty individual climbs into one shared movement toward twelve family-style homes.</p>
-        <div><button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Support the climb ↗</button><a className="button button--ghost" href="mailto:news@eden-ministries.org?subject=Climb%20Kili%202027">Contact the team ↗</a></div>
+        <div><button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Help build a home</button><a className="button button--ghost" href="mailto:news@eden-ministries.org?subject=Climb%20Kili%202027">Contact the team</a></div>
       </section>
 
       <Footer />
+      {!donationOpen && <button className="mobile-sticky-donate" type="button" onClick={() => setDonationOpen(true)}>Help build a home</button>}
       <DonationDrawer open={donationOpen} onClose={() => setDonationOpen(false)} />
     </main>
   );

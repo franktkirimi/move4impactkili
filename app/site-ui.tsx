@@ -1,38 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { ReactNode, useEffect, useState } from "react";
 import { givebutterAccount, givingUrl } from "./campaign-data";
 
-export function GivebutterEmbed({ id, fallback }: { id: string; fallback?: ReactNode }) {
-  const host = useRef<HTMLSpanElement>(null);
-  const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    const started = Date.now();
-    const timer = window.setInterval(() => {
-      const widget = host.current?.querySelector("givebutter-widget");
-      if (widget?.shadowRoot?.textContent?.trim()) {
-        window.clearInterval(timer);
-      } else if (Date.now() - started > 6000) {
-        window.clearInterval(timer);
-        setFailed(true);
-      }
-    }, 800);
-    return () => window.clearInterval(timer);
-  }, [id]);
-
-  if (failed) {
-    return fallback === undefined ? (
-      <a className="gb-fallback" href={givingUrl} target="_blank" rel="noopener noreferrer">
-        LIVE TOTAL ON GIVEBUTTER <span aria-hidden="true">↗</span>
-      </a>
-    ) : (
-      <>{fallback}</>
-    );
-  }
-  return (
-    <span className="gb-slot" ref={host}>
+export function GivebutterEmbed({ id = "gOKyBe", fallback }: { id?: string; fallback?: ReactNode }) {
+  return fallback === null ? null : (
+    <span className="gb-slot">
       <givebutter-widget id={id} account={givebutterAccount} />
     </span>
   );
@@ -48,8 +23,7 @@ const nav = [
 export function Mark({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link className={`mark ${inverse ? "mark--inverse" : ""}`} href="/" aria-label="Move4Impact Climb Kili home">
-      <span className="mark__m">M4I</span>
-      <span className="mark__copy">CLIMB KILI<br />2027</span>
+      <Image className="mark__logo" src="/images/move4impact-logo-orange.png" alt="Move4Impact" width={146} height={64} priority unoptimized />
     </Link>
   );
 }
@@ -72,7 +46,7 @@ export function SiteHeader({ onSupport, inverse = false }: { onSupport?: () => v
       </nav>
       <div className="header-actions">
         <button className="support-chip" type="button" onClick={onSupport}>
-          Support the climb <span aria-hidden="true">↗</span>
+          Help build a home
         </button>
         <button
           className="menu-toggle"
@@ -95,7 +69,7 @@ export function SiteHeader({ onSupport, inverse = false }: { onSupport?: () => v
             ))}
           </nav>
           <button className="button button--orange button--wide" type="button" onClick={() => { setOpen(false); onSupport?.(); }}>
-            Support the climb <span aria-hidden="true">↗</span>
+            Help build a home
           </button>
         </div>
       )}
@@ -121,22 +95,25 @@ export function DonationDrawer({ open, onClose, climber }: { open: boolean; onCl
       <button className="drawer-scrim" aria-label="Close donation panel" onClick={onClose} />
       <aside className="donation-drawer">
         <button className="drawer-close" type="button" aria-label="Close donation panel" onClick={onClose}>×</button>
+        <div className="drawer-kicker"><span>MOVE4IMPACT</span><b>5,895 M → HOME</b></div>
         <div className="eyebrow eyebrow--orange">MOVE US HIGHER</div>
-        <h2 id="donation-title">TURN A GIFT<br />INTO ALTITUDE.</h2>
-        <p>{climber ? `Support ${climber}’s personal climb.` : "Support the team’s US$1 million campaign."}</p>
+        <h2 id="donation-title">YOUR GIFT<br /><em>BUILDS HOME.</em></h2>
+        <p>{climber ? `Support ${climber}’s verified personal climb.` : "Back the team’s US$1 million mission for twelve family-style homes."}</p>
         <div className="donation-live donation-live--widget">
-          <span>CAMPAIGN TOTAL</span>
-          <GivebutterEmbed id="gOKyBe" />
+          <div className="donation-live__heading"><span>LIVE CAMPAIGN</span><small>GOAL · US$1,000,000</small></div>
+          <GivebutterEmbed />
         </div>
-        <div className="donation-widget">
-          <GivebutterEmbed id="jNKVmq" fallback={null} />
+        <div className="drawer-proof" aria-label="Donation assurances">
+          <div><b>01</b><span>Verified<br />campaign</span></div>
+          <div><b>02</b><span>Secure<br />checkout</span></div>
+          <div><b>03</b><span>Mission-first<br />giving</span></div>
         </div>
         <a className="button button--orange button--wide donation-submit" href={givingUrl} target="_blank" rel="noopener noreferrer">
-          Give on Givebutter <span aria-hidden="true">↗</span>
+          Make your gift
         </a>
         <p className="drawer-note">
-          Checkout is handled securely by Givebutter, the campaign’s verified fundraising platform. No payment details are collected by this site.{" "}
-          <a href={givingUrl} target="_blank" rel="noopener noreferrer">Open the full campaign page <span aria-hidden="true">↗</span></a>
+          Checkout is securely handled by Givebutter. Athletes cover expedition costs separately, so public peer-to-peer gifts support Eden Ministries.{" "}
+          <a href={givingUrl} target="_blank" rel="noopener noreferrer">View campaign details <span aria-hidden="true">↗</span></a>
         </p>
       </aside>
     </div>
