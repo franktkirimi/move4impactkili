@@ -1,18 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { CSSProperties, useEffect, useState } from "react";
-import { altitudeStages, climbers, givebutterAccount, givingUrl, impactProjects, products, trailUpdates } from "./campaign-data";
+import { useEffect, useState } from "react";
+import { altitudeStages, climbers, givingUrl } from "./campaign-data";
 import LivingImpactVisualizer from "./living-impact-visualizer";
-import { DonationDrawer, Footer, InterestForm, SiteHeader } from "./site-ui";
+import { DonationDrawer, Footer, GivebutterEmbed, SiteHeader } from "./site-ui";
 
 export default function HomeExperience() {
   const [donationOpen, setDonationOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [impactId, setImpactId] = useState<(typeof impactProjects)[number]["id"]>("homes");
-  const [challenge, setChallenge] = useState("59 KM WALK");
-  const impact = impactProjects.find((item) => item.id === impactId) ?? impactProjects[0];
 
   useEffect(() => {
     const update = () => {
@@ -36,321 +32,128 @@ export default function HomeExperience() {
         <div className="altitude-rail__track">
           <span className="altitude-rail__fill" style={{ height: `${scrollProgress}%` }} />
           {altitudeStages.map(([height], index) => (
-            <span className="altitude-rail__tick" key={height} style={{ bottom: `${index * 25}%` }}>
-              <b>{height}</b>
-            </span>
+            <span className="altitude-rail__tick" key={height} style={{ bottom: `${index * 25}%` }}><b>{height}</b></span>
           ))}
         </div>
         <strong>{Math.round((scrollProgress / 100) * 5895).toLocaleString()} M</strong>
       </aside>
 
       <section className="hero" id="top">
-        <Image
-          className="hero__image"
-          src="/images/climb-kili-sunrise.png"
-          alt="Three climbers ascending a mountain trail at sunrise"
-          fill
-          priority
-          unoptimized
-          sizes="100vw"
-        />
+        <Image className="hero__image" src="/images/hero-belong-home.jpg" alt="A caregiver and child walking toward a warmly lit family home" fill priority sizes="100vw" />
         <div className="hero__veil" />
         <div className="topo topo--hero" aria-hidden="true" />
         <div className="hero__content">
           <p className="eyebrow eyebrow--orange">MOVE4IMPACT · KILIMANJARO 2027</p>
-          <h1>CLIMB A<br />MOUNTAIN.<br /><em>BUILD A HOME.</em></h1>
-          <p className="hero__copy">In 2027, a team of athletes will run, climb and raise US$1 million to help build 12 family-style homes for children in Zimbabwe.</p>
+          <h1>EVERY STEP.<br />EVERY GIFT.<br /><em>A PLACE TO BELONG.</em></h1>
+          <p className="hero__copy">Twenty athletes. A marathon and an eight-day ascent. One US$1 million mission to help build twelve family-style homes in Zimbabwe.</p>
           <div className="hero__actions">
-            <button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Support the climb <span aria-hidden="true">↗</span></button>
-            <a className="button button--ghost" href="#team">Meet the team <span aria-hidden="true">↓</span></a>
-            <Link className="text-link" href="/apparel">Wear the movement <span aria-hidden="true">↗</span></Link>
+            <button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Help build a home</button>
+            <a className="button button--ghost" href="#mission">Why we climb</a>
           </div>
+          <a className="hero__mobile-progress" href={givingUrl} target="_blank" rel="noopener noreferrer">View live campaign progress</a>
         </div>
         <div className="hero__metrics hero__metrics--live" aria-label="Live campaign total">
           <span>RAISED · LIVE FROM GIVEBUTTER</span>
-          <givebutter-widget id="gOKyBe" account={givebutterAccount} />
-          <small>
-            OF US$1,000,000 ·{" "}
-            <a href={givingUrl} target="_blank" rel="noopener noreferrer">VIEW THE CAMPAIGN <span aria-hidden="true">↗</span></a>
-          </small>
+          <GivebutterEmbed />
+          <small>OF US$1,000,000 · <a href={givingUrl} target="_blank" rel="noopener noreferrer">VIEW CAMPAIGN ↗</a></small>
         </div>
-        <div className="hero__caption"><span>THE EXPEDITION · CLIMB KILI 2027</span><span>5895 M · TANZANIA</span></div>
-        <a className="scroll-cue" href="#commitment" aria-label="Begin the digital ascent"><span />SCROLL TO ASCEND</a>
-      </section>
-
-      <section className="kinetic" id="commitment" aria-label="Campaign values">
-        <div className="kinetic__line"><span>CLIMB</span><i>·</i><span>ENDURE</span><i>·</i><span>BUILD</span><i>·</i><span>BELIEVE</span><i>·</i><span>MOVE</span><i>·</i></div>
-        <div className="kinetic__statement">
-          <span>0 M · THE COMMITMENT</span>
-          <p>TWENTY ATHLETES. ONE MOUNTAIN. TWELVE NEW HOMES. ONE MILLION DOLLARS FOR CHILDREN IN ZIMBABWE.</p>
-        </div>
+        <div className="hero__caption"><span>LEMOSHO ROUTE · MARCH 2027</span><span>5,895 M · TANZANIA</span></div>
+        <a className="scroll-cue" href="#challenge" aria-label="Begin the digital ascent"><span />SCROLL TO ASCEND</a>
       </section>
 
       <section className="challenge section-dark" id="challenge">
         <div className="section-index">01 / THE CHALLENGE</div>
         <div className="challenge__number">5,895<span>M</span></div>
         <div className="challenge__body">
-          <p className="eyebrow eyebrow--blue">MOUNT KILIMANJARO · TANZANIA</p>
-          <h2>HIGHER THAN<br />THE BODY WANTS<br />TO GO.</h2>
-          <p>Months of endurance work. Thin air. Long days. A physical, mental and spiritual commitment carried by a team that understands the climb is only a symbol.</p>
+          <p className="eyebrow eyebrow--blue">THE ROOF OF AFRICA</p>
+          <h2>RUN AT THE BASE.<br /><em>CLIMB TO<br />THE SUMMIT.</em></h2>
+          <p>On 21 March 2027, the team takes on the Kilimanjaro Marathon. The next day, the eight-day Lemosho ascent begins—through five climate zones toward an Easter Sunday summit.</p>
         </div>
         <div className="challenge__data">
-          <div><span>ROUTE</span><strong>[Confirmed route]</strong></div>
-          <div><span>TRAINING</span><strong>Endurance · strength · ascent</strong></div>
-          <div><span>EXPEDITION</span><strong>[Confirmed campaign date]</strong></div>
+          <div><span>TEAM</span><strong>20 athletes</strong></div>
+          <div><span>ROUTE</span><strong>Lemosho · eight days</strong></div>
+          <div><span>SUMMIT</span><strong>28 March 2027</strong></div>
         </div>
-        <div className="challenge__line">5,895 METRES ABOVE SEA LEVEL. <em>TWELVE HOMES CLOSER TO REALITY.</em></div>
+        <div className="challenge__line">THE SUMMIT IS A MILESTONE. <em>THE HOMES ARE THE VICTORY.</em></div>
       </section>
 
-      <section className="why section-light" id="why">
+      <section className="why section-light" id="mission">
         <div className="section-index">02 / WHY WE CLIMB</div>
         <div className="why__heading">
           <p className="eyebrow">THE TRUE DESTINATION</p>
           <h2>THE SUMMIT IS NOT<br />THE DESTINATION.<br /><em>HOME IS.</em></h2>
         </div>
+        <p className="why__context">Eden Ministries creates family-style homes in Zimbabwe where children receive consistent care, education, stability and a lasting place to belong.</p>
         <div className="parallel-stories">
           <article className="parallel-card parallel-card--athlete">
-            <div className="parallel-card__visual">
-              <Image className="parallel-card__image" src="/images/climb-kili-trail.png" alt="A climber moving uphill on a rocky trail" fill sizes="(max-width: 760px) 100vw, 45vw" />
-              <span>EXPEDITION TRAINING</span><b>STRAP IN.</b>
-            </div>
-            <p><span>THE ATHLETE</span>Fastens a pack. Takes the next uphill step. Learns to keep moving when the easy answer is to stop.</p>
+            <div className="parallel-card__visual"><Image className="parallel-card__image" src="/images/move4impact-real-trail.jpg" alt="Move4Impact runners and a cyclist moving together on a woodland trail" fill sizes="(max-width: 760px) 100vw, 45vw" /><span>REAL MOVEMENT · ZIMBABWE</span><b>ENDURE.</b></div>
+            <p><span>THE ATHLETE</span>Trains, climbs and invites a community to move toward something larger than a summit.</p>
           </article>
           <div className="parallel-link" aria-hidden="true"><span /><b>ONE<br />MOVEMENT</b><span /></div>
           <article className="parallel-card parallel-card--home">
-            <div className="parallel-card__visual">
-              <Image className="parallel-card__image" src="/images/eden-homes-aerial.jpg" alt="Aerial view of the Eden campus and family-style homes in Zimbabwe" fill sizes="(max-width: 760px) 100vw, 45vw" />
-              <span>EDEN CAMPUS · ZIMBABWE</span><b>BUILD OUT.</b>
-            </div>
-            <p><span>THE HOME</span>A caregiver opens a door. A child begins a school day. Another brick becomes part of a stable future.</p>
+            <div className="parallel-card__visual"><Image className="parallel-card__image" src="/images/eden-belong-children.jpg" alt="Children laughing together outside a family-style home in Zimbabwe" fill sizes="(max-width: 760px) 100vw, 45vw" /><span>EDEN · ZIMBABWE</span><b>BELONG.</b></div>
+            <p><span>THE HOME</span>A place for consistent care, school mornings, shared meals and the ordinary confidence of belonging.</p>
           </article>
         </div>
         <div className="why__manifesto">
-          <p>Every gift helps move the campaign toward family-style care, education, health, belonging and long-term opportunity—communicated with dignity, hope and respect.</p>
-          <button className="text-link text-link--dark" type="button" onClick={() => setDonationOpen(true)}>Build a home <span aria-hidden="true">↗</span></button>
+          <p>Every gift helps build twelve safe, loving homes where children can belong and thrive.</p>
+          <button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Help build a home</button>
         </div>
       </section>
 
       <LivingImpactVisualizer onDonate={() => setDonationOpen(true)} />
 
-      <section className="impact section-glacier" id="impact">
-        <div className="section-index">03 / THE US$1 MILLION PLAN</div>
-        <div className="impact__intro">
-          <div>
-            <p className="eyebrow">TRANSPARENCY, BUILT IN</p>
-            <h2>ONE TARGET.<br /><em>A VILLAGE OF PROGRESS.</em></h2>
-          </div>
-          <p>Explore the planned campus structure. Final budgets, drawings and construction stages connect here only after approval.</p>
-        </div>
-        <div className="campus">
-          <div className="campus__plan">
-            <div className="topo topo--campus" aria-hidden="true" />
-            <span className="campus__north">N ↑</span>
-            <span className="campus__coordinate">EDEN CAMPUS · ZIMBABWE<br />[CONFIRMED COORDINATES]</span>
-            {impactProjects.map((project, index) => (
-              <button
-                key={project.id}
-                type="button"
-                className={`campus-node campus-node--${index + 1} ${impactId === project.id ? "active" : ""}`}
-                onClick={() => setImpactId(project.id)}
-                aria-pressed={impactId === project.id}
-              >
-                <span>{project.number}</span><b>{project.title}</b>
-              </button>
-            ))}
-            <div className="home-cluster" aria-hidden="true">
-              {Array.from({ length: 12 }, (_, index) => <i key={index} style={{ "--i": index } as CSSProperties} />)}
-            </div>
-          </div>
-          <aside className="campus__detail" aria-live="polite">
-            <span className="campus__detail-number">{impact.number}</span>
-            <p className="eyebrow eyebrow--orange">SELECTED PROJECT</p>
-            <h3>{impact.title}</h3>
-            <p>{impact.purpose}</p>
-            <dl>
-              <div><dt>Allocation</dt><dd>{impact.allocation}</dd></div>
-              <div><dt>Funding status</dt><dd>{impact.status}</dd></div>
-              <div><dt>Current stage</dt><dd>{impact.stage}</dd></div>
-              <div><dt>Intended impact</dt><dd>{impact.impact}</dd></div>
-            </dl>
-            <Link className="text-link text-link--dark" href="/impact">See the full impact plan <span aria-hidden="true">↗</span></Link>
-          </aside>
-        </div>
-      </section>
-
-      <section className="ascent section-dark" id="ascent">
-        <div className="section-index">04 / FUNDRAISING ASCENT</div>
-        <div className="ascent__copy">
-          <p className="eyebrow eyebrow--orange">LIVE CAMPAIGN MOMENTUM</p>
-          <h2>EVERY GIFT<br /><em>MOVES US HIGHER.</em></h2>
-          <p>Fundraising progress becomes altitude, construction progress and visible momentum. Totals stream live from the verified Givebutter campaign.</p>
-          <button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Move us higher <span aria-hidden="true">↗</span></button>
-        </div>
-        <div className="ascent__route">
-          <div className="route-axis">
-            <span className="route-axis__fill" />
-            {altitudeStages.map(([height, label], index) => (
-              <div className="route-stage" key={height} style={{ bottom: `${index * 24}%` }}>
-                <i /><b>{height}</b><span>{label}</span>
-              </div>
-            ))}
-            <div className="route-marker"><span>LIVE FEED<br />CONNECTS HERE</span></div>
-          </div>
-          <div className="ascent__total">
-            <span>TOTAL RAISED</span>
-            <div className="ascent__goal-widget"><givebutter-widget id="gOKyBe" account={givebutterAccount} /></div>
-            <small>OF US$1,000,000</small>
-            <div className="ascent__next"><b>NEXT MILESTONE</b><span>[Confirmed funding milestone]</span></div>
-          </div>
-        </div>
-      </section>
-
       <section className="team section-light" id="team">
-        <div className="section-index">05 / MEET THE CLIMBERS</div>
+        <div className="section-index">03 / MEET THE CLIMBERS</div>
         <div className="team__intro">
-          <div><p className="eyebrow">THE EXPEDITION TEAM</p><h2>TWENTY REASONS<br />TO <em>KEEP MOVING.</em></h2></div>
-          <p>Every climber carries a personal story, training commitment and fundraising target. Athlete data remains visibly pending until the roster is approved.</p>
+          <div><p className="eyebrow">THE ANNOUNCED TEAM</p><h2>SEVEN CLIMBERS.<br />ONE <em>SHARED PURPOSE.</em></h2></div>
+          <p>Each athlete is working toward a US$50,000 target. Support them directly through their verified Givebutter profiles.</p>
         </div>
         <div className="climber-grid">
           {climbers.map((climber, index) => (
             <article className={`climber-card climber-card--${climber.accent}`} key={climber.slug}>
-              <Link href={climber.image ? `/team/${climber.slug}` : "#team"} className="climber-card__visual" aria-label={climber.image ? `View ${climber.name} profile` : "Athlete profile publishing soon"}>
+              <a href={climber.profileUrl} target="_blank" rel="noopener noreferrer" className="climber-card__visual" aria-label={`Support ${climber.name} on Givebutter`}>
                 {climber.image ? <Image className="climber-card__image" src={climber.image} alt={climber.imageAlt ?? `${climber.name} athlete portrait`} fill sizes="(max-width: 760px) 82vw, (max-width: 1100px) 50vw, 25vw" style={{ objectPosition: climber.imagePosition }} /> : null}
-                <span className="climber-card__index">0{index + 1} / 20</span>
-                {!climber.image ? <span className="climber-card__placeholder">ATHLETE<br />ANNOUNCEMENT<br />PENDING</span> : null}
-                <b>{climber.name}</b>
-              </Link>
+                <span className="climber-card__index">0{index + 1} / 07</span><b>{climber.name}</b>
+              </a>
               <div className="climber-card__content">
-                <span>{climber.location}</span>
-                <p>{climber.reason}</p>
-                <div className="climber-card__metrics">
-                  <div><small>RAISED</small><b>{climber.raised}</b></div>
-                  <div><small>TRAINED</small><b>{climber.trained}</b></div>
-                </div>
-                {climber.image ? <Link className="text-link text-link--dark" href={`/team/${climber.slug}`}>View {climber.name.split(" ")[0]}’s climb <span aria-hidden="true">↗</span></Link> : <span className="text-link text-link--muted">Profile publishing soon</span>}
+                <span>{climber.location}</span><p>{climber.reason}</p>
+                <div className="climber-card__metrics"><div><small>PERSONAL TARGET</small><b>{climber.target}</b></div><div><small>STATUS</small><b>LIVE</b></div></div>
+                <a className="text-link text-link--dark" href={climber.profileUrl} target="_blank" rel="noopener noreferrer">Support on Givebutter ↗</a>
               </div>
             </article>
           ))}
         </div>
-        <div className="team__footer"><span>01—04 / 20</span><div className="team__rule" /><button type="button" disabled>Full roster pending</button></div>
       </section>
 
-      <section className="trail section-blue" id="updates">
-        <div className="section-index">06 / FROM THE TRAIL</div>
-        <div className="trail__headline">
-          <div><p className="eyebrow">CAMPAIGN JOURNAL</p><h2>A MOVEMENT,<br /><em>STILL IN MOTION.</em></h2></div>
-          <span className="live-pill"><i /> LIVE FEED READY</span>
+      <section className="ascent section-dark" id="transparency" style={{ background: "#141728" }}>
+        <div className="ascent__intro">
+          <h2>WATCH VIDEO BELOW</h2>
+          <p>Meet the people, purpose and shared commitment behind every step toward twelve safe, loving homes.</p>
         </div>
-        <div className="update-grid">
-          {trailUpdates.map((update, index) => (
-            <article className={`update-card update-card--${index + 1}`} key={update.tag}>
-              <div className="update-card__media">
-                <Image
-                  className="update-card__image"
-                  src={index === 0 ? "/images/frank-kirimi.jpg" : index === 1 ? "/images/climb-kili-sunrise.png" : "/images/eden-homes-aerial.jpg"}
-                  alt={index === 0 ? "Frank Kirimi training on a trail" : index === 1 ? "Climbers ascending a mountain at sunrise" : "Aerial view of the Eden campus in Zimbabwe"}
-                  fill
-                  sizes="(max-width: 760px) 84vw, 34vw"
-                />
-                <span>{update.marker}</span><b>{index === 0 ? "15.0" : index === 1 ? "$" : "12"}</b><small>{index === 0 ? "KM" : index === 1 ? "MOMENTUM" : "HOMES"}</small>
-              </div>
-              <div className="update-card__copy"><span>{update.tag}</span><h3>{update.title}</h3><p>{update.copy}</p><button className="text-link text-link--dark" type="button">Open field note <span aria-hidden="true">↗</span></button></div>
-            </article>
-          ))}
+        <div className="ascent__video">
+          <iframe
+            src="https://www.youtube.com/embed/0SONMx6nn80?playsinline=1&rel=0"
+            title="Move4Impact and Eden Ministries campaign video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            loading="lazy"
+            allowFullScreen
+          />
         </div>
       </section>
 
-      <section className="wear section-dark" id="wear">
-        <div className="section-index">07 / WEAR THE MOVEMENT</div>
-        <div className="wear__intro">
-          <div><p className="eyebrow eyebrow--orange">THE CLIMB KILI KIT</p><h2>BUILT TO MOVE.<br /><em>WORN WITH PURPOSE.</em></h2></div>
-          <p>Campaign identity made physical. Every final product will show its verified contribution to the campaign before orders open.</p>
-        </div>
-        <div className="product-grid">
-          {products.map((product, index) => (
-            <article className={`product-card product-card--${index + 1}`} key={product.code}>
-              <div className="product-card__visual">
-                <span>{product.code}</span>
-                <div className="garment-shape" aria-hidden="true"><i /></div>
-                <small>CAMPAIGN PRODUCT VISUAL PLACEHOLDER</small>
-              </div>
-              <div className="product-card__copy">
-                <span>{product.type}</span><h3>{product.name}</h3>
-                <dl><div><dt>Colours</dt><dd>{product.colours}</dd></div><div><dt>Sizes</dt><dd>{product.sizes}</dd></div></dl>
-                <div className="product-card__bottom"><b>{product.price}</b><span>{product.status}</span></div>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="wear__form"><div><span>EARLY ACCESS</span><p>Be first to know when the verified kit, pricing and contribution details are ready.</p></div><InterestForm /></div>
-        <Link className="button button--ghost" href="/apparel">Enter the lookbook <span aria-hidden="true">↗</span></Link>
-      </section>
-
-      <section className="pathways section-orange">
-        <div className="section-index">08 / CHOOSE YOUR CLIMB</div>
-        <h2>HOW WILL YOU<br /><em>MOVE THE MOUNTAIN?</em></h2>
-        <div className="pathway-list">
-          {[
-            ["01", "Give", "Make a one-time or recurring contribution.", "Support the climb"],
-            ["02", "Champion a climber", "Back a team member or fundraise alongside them.", "Meet the team"],
-            ["03", "Wear the movement", "Reserve campaign kit built for motion.", "Enter the lookbook"],
-            ["04", "Partner", "Join as a corporate, church, school or community partner.", "Start a partnership"],
-          ].map(([number, title, copy, action], index) => (
-            <button className="pathway" key={number} type="button" onClick={() => index === 0 ? setDonationOpen(true) : document.getElementById(index === 1 ? "team" : index === 2 ? "wear" : "partners")?.scrollIntoView({ behavior: "smooth" })}>
-              <span>{number}</span><h3>{title}</h3><p>{copy}</p><b>{action} ↗</b>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <section className="community section-light" id="community">
-        <div className="section-index">09 / MOVE YOUR MOUNTAIN</div>
-        <div className="community__intro">
-          <div><p className="eyebrow">YOUR CHALLENGE. SHARED PURPOSE.</p><h2>NOT EVERY CLIMB<br />NEEDS A <em>SUMMIT.</em></h2></div>
-          <p>Choose a challenge that asks something real of you. Track the distance, share the story and turn your movement into support.</p>
-        </div>
-        <div className="challenge-builder">
-          <div className="challenge-builder__choices">
-            <span>01 · CHOOSE YOUR MOVEMENT</span>
-            {["59 KM WALK", "100 KM RUN", "LOCAL CLIMB", "CYCLE 589 KM"].map((item) => <button type="button" className={challenge === item ? "active" : ""} key={item} onClick={() => setChallenge(item)}><i />{item}<b>↗</b></button>)}
-          </div>
-          <div className="challenge-preview">
-            <span className="challenge-preview__tag">MOVE4IMPACT · COMMUNITY CHALLENGE</span>
-            <strong>{challenge.split(" ")[0]}</strong><b>{challenge.split(" ").slice(1).join(" ")}</b>
-            <p>MY MOUNTAIN.<br />OUR MOVEMENT.</p>
-            <div className="fake-qr" aria-label="QR code placeholder">M4I<br />QR</div>
-            <small>PERSONAL PAGE · TRACKER · BADGE · SHARE IMAGE</small>
-          </div>
-          <div className="challenge-builder__action">
-            <span>02 · SET YOUR TARGET</span><p>[Fundraising target]</p><button className="button button--dark" type="button">Create your challenge <span aria-hidden="true">↗</span></button><small>Interface preview. Account and fundraising setup will connect before launch.</small>
-          </div>
-        </div>
-      </section>
-
-      <section className="partners section-glacier" id="partners">
-        <div className="section-index">10 / PARTNERS</div>
-        <div className="partners__intro"><div><p className="eyebrow">BUILD WITH US</p><h2>THE MOUNTAIN<br />TAKES A <em>TEAM.</em></h2></div><p>Corporate sponsors, churches, schools, fitness communities, brands and builders can each move a different part of the campaign forward.</p></div>
-        <div className="partner-tiers">
-          {[
-            ["TRAIL", "Community movement", "Activate people, places and local challenges."],
-            ["ASCENT", "Campaign momentum", "Fuel training, storytelling and fundraising reach."],
-            ["SUMMIT", "Expedition platform", "Help carry the team to Kilimanjaro and amplify the mission."],
-            ["VILLAGE BUILDER", "The lasting victory", "Help turn approved construction plans into family-style homes."],
-          ].map(([title, label, copy], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><b>{label}</b><p>{copy}</p><small>[Partner level details]</small></article>)}
-        </div>
-        <div className="partner-proof"><span>PARTNER IDENTITIES WILL APPEAR HERE WITH RESTRAINT</span><div /><div /><div /><button className="button button--dark" type="button">Become a campaign partner <span aria-hidden="true">↗</span></button></div>
-      </section>
-
-      <section className="finale">
+      <section className="finale" id="donate">
         <div className="finale__mountain" aria-hidden="true" />
         <div className="finale__homes" aria-hidden="true">{Array.from({ length: 6 }, (_, index) => <i key={index} />)}</div>
         <p className="eyebrow eyebrow--orange">5,895 M → HOME</p>
         <h2>THE SUMMIT IS<br />A MILESTONE.<br /><em>THE HOMES ARE<br />THE VICTORY.</em></h2>
-        <p>Every step, gift, kilometre and shared story moves the campaign closer to twelve new homes.</p>
-        <div><button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Support the climb <span aria-hidden="true">↗</span></button><a className="button button--ghost" href="#partners">Become a campaign partner <span aria-hidden="true">↑</span></a></div>
+        <p>Help turn twenty individual climbs into one shared movement toward twelve family-style homes.</p>
+        <div><button className="button button--orange" type="button" onClick={() => setDonationOpen(true)}>Help build a home</button><a className="button button--ghost" href="mailto:news@eden-ministries.org?subject=Climb%20Kili%202027">Contact the team</a></div>
       </section>
 
       <Footer />
+      {!donationOpen && <button className="mobile-sticky-donate" type="button" onClick={() => setDonationOpen(true)}>Help build a home</button>}
       <DonationDrawer open={donationOpen} onClose={() => setDonationOpen(false)} />
     </main>
   );

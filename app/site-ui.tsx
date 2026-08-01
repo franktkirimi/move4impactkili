@@ -1,24 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import Image from "next/image";
+import { ReactNode, useEffect, useState } from "react";
 import { givebutterAccount, givingUrl } from "./campaign-data";
-import { saveInterest } from "./supabase";
+
+export function GivebutterEmbed({ id = "gOKyBe", fallback }: { id?: string; fallback?: ReactNode }) {
+  return fallback === null ? null : (
+    <span className="gb-slot">
+      <givebutter-widget id={id} account={givebutterAccount} />
+    </span>
+  );
+}
 
 const nav = [
-  ["Why We Climb", "/#why"],
-  ["The Team", "/#team"],
-  ["Impact", "/impact"],
-  ["Wear the Movement", "/apparel"],
-  ["Updates", "/#updates"],
-  ["Partners", "/#partners"],
+  ["The Expedition", "/#challenge"],
+  ["Why We Climb", "/#mission"],
+  ["Climbers", "/#team"],
+  ["Transparency", "/#transparency"],
 ] as const;
 
 export function Mark({ inverse = false }: { inverse?: boolean }) {
   return (
     <Link className={`mark ${inverse ? "mark--inverse" : ""}`} href="/" aria-label="Move4Impact Climb Kili home">
-      <span className="mark__m">M4I</span>
-      <span className="mark__copy">CLIMB KILI<br />2027</span>
+      <Image className="mark__logo" src="/images/move4impact-logo-orange.png" alt="Move4Impact" width={146} height={64} priority unoptimized />
     </Link>
   );
 }
@@ -41,7 +46,7 @@ export function SiteHeader({ onSupport, inverse = false }: { onSupport?: () => v
       </nav>
       <div className="header-actions">
         <button className="support-chip" type="button" onClick={onSupport}>
-          Support the climb <span aria-hidden="true">↗</span>
+          Help build a home
         </button>
         <button
           className="menu-toggle"
@@ -64,7 +69,7 @@ export function SiteHeader({ onSupport, inverse = false }: { onSupport?: () => v
             ))}
           </nav>
           <button className="button button--orange button--wide" type="button" onClick={() => { setOpen(false); onSupport?.(); }}>
-            Support the climb <span aria-hidden="true">↗</span>
+            Help build a home
           </button>
         </div>
       )}
@@ -90,61 +95,28 @@ export function DonationDrawer({ open, onClose, climber }: { open: boolean; onCl
       <button className="drawer-scrim" aria-label="Close donation panel" onClick={onClose} />
       <aside className="donation-drawer">
         <button className="drawer-close" type="button" aria-label="Close donation panel" onClick={onClose}>×</button>
+        <div className="drawer-kicker"><span>MOVE4IMPACT</span><b>5,895 M → HOME</b></div>
         <div className="eyebrow eyebrow--orange">MOVE US HIGHER</div>
-        <h2 id="donation-title">TURN A GIFT<br />INTO ALTITUDE.</h2>
-        <p>{climber ? `Support ${climber}’s personal climb.` : "Support the team’s US$1 million campaign."}</p>
+        <h2 id="donation-title">YOUR GIFT<br /><em>BUILDS HOME.</em></h2>
+        <p>{climber ? `Support ${climber}’s verified personal climb.` : "Back the team’s US$1 million mission for twelve family-style homes."}</p>
         <div className="donation-live donation-live--widget">
-          <span>CAMPAIGN TOTAL</span>
-          <givebutter-widget id="gOKyBe" account={givebutterAccount} />
+          <div className="donation-live__heading"><span>LIVE CAMPAIGN</span><small>GOAL · US$1,000,000</small></div>
+          <GivebutterEmbed />
         </div>
-        <div className="donation-widget">
-          <givebutter-widget id="jNKVmq" account={givebutterAccount} />
+        <div className="drawer-proof" aria-label="Donation assurances">
+          <div><b>01</b><span>Verified<br />campaign</span></div>
+          <div><b>02</b><span>Secure<br />checkout</span></div>
+          <div><b>03</b><span>Mission-first<br />giving</span></div>
         </div>
         <a className="button button--orange button--wide donation-submit" href={givingUrl} target="_blank" rel="noopener noreferrer">
-          Give on Givebutter <span aria-hidden="true">↗</span>
+          Make your gift
         </a>
         <p className="drawer-note">
-          Checkout is handled securely by Givebutter, the campaign’s verified fundraising platform. No payment details are collected by this site.{" "}
-          <a href={givingUrl} target="_blank" rel="noopener noreferrer">Open the full campaign page <span aria-hidden="true">↗</span></a>
+          Checkout is securely handled by Givebutter. Athletes cover expedition costs separately, so public peer-to-peer gifts support Eden Ministries.{" "}
+          <a href={givingUrl} target="_blank" rel="noopener noreferrer">View campaign details <span aria-hidden="true">↗</span></a>
         </p>
       </aside>
     </div>
-  );
-}
-
-export function InterestForm({ kind = "campaign kit" }: { kind?: string }) {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const email = new FormData(event.currentTarget).get("email");
-    if (typeof email !== "string" || !email) return;
-    setStatus("sending");
-    try {
-      await saveInterest(email, kind);
-      setStatus("sent");
-    } catch (error) {
-      console.error(error);
-      setStatus("error");
-    }
-  }
-
-  if (status === "sent") {
-    return <div className="form-success" role="status"><span>✓</span> You’re on the list. We’ll email you when the {kind} is ready.</div>;
-  }
-  return (
-    <form className="interest-form" onSubmit={submit}>
-      <label>
-        <span>Email address</span>
-        <input type="email" name="email" placeholder="you@example.com" required disabled={status === "sending"} />
-      </label>
-      <button className="button button--orange" type="submit" disabled={status === "sending"}>
-        {status === "sending" ? "Reserving…" : <>Reserve {kind} <span aria-hidden="true">↗</span></>}
-      </button>
-      {status === "error" && (
-        <p className="form-error" role="alert">Something went wrong — please try again in a moment.</p>
-      )}
-    </form>
   );
 }
 
@@ -157,16 +129,16 @@ export function Footer() {
           <p>Twenty athletes. One mountain.<br />Twelve new homes.</p>
         </div>
         <div className="footer__links">
-          <Link href="/#why">Why we climb</Link>
+          <Link href="/#mission">Why we climb</Link>
           <Link href="/#team">The team</Link>
-          <Link href="/impact">Impact</Link>
-          <Link href="/apparel">Campaign kit</Link>
+          <Link href="/#transparency">Transparency</Link>
+          <a href={givingUrl} target="_blank" rel="noopener noreferrer">Donate</a>
         </div>
         <div className="footer__links">
-          <a href="mailto:[campaign-email]">[Campaign email]</a>
-          <span>[Instagram]</span>
-          <span>[YouTube]</span>
-          <span>[LinkedIn]</span>
+          <a href="mailto:news@eden-ministries.org">news@eden-ministries.org</a>
+          <a href="https://eden-ministries.org/" target="_blank" rel="noopener noreferrer">Eden Ministries</a>
+          <a href="https://www.linkedin.com/company/eden-ministries" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href={givingUrl} target="_blank" rel="noopener noreferrer">Givebutter</a>
         </div>
       </div>
       <div className="footer__bottom">

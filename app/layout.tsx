@@ -27,13 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       type: "website",
       url: origin,
-      images: [{ url: `${origin}/og.png`, width: 1536, height: 1024, alt: "Move4Impact Climb Kili 2027 campaign" }],
+      images: [{ url: `${origin}/og.jpg`, width: 1366, height: 768, alt: "Kilimanjaro 2027 — Hope Rising" }],
     },
     twitter: {
       card: "summary_large_image",
       title: "Climb a Mountain. Build a Home.",
       description,
-      images: [`${origin}/og.png`],
+      images: [`${origin}/og.jpg`],
     },
   };
 }
@@ -47,7 +47,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
-        <Script src="https://widgets.givebutter.com/latest.umd.cjs?acct=226906&p=other" strategy="lazyOnload" />
+        <Script src="https://widgets.givebutter.com/latest.umd.cjs?acct=226906&p=other" strategy="afterInteractive" />
       </body>
     </html>
   );

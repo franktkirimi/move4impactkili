@@ -1,8 +1,8 @@
 "use client";
 
-import { Detailed, Environment, Line, OrbitControls, PerformanceMonitor, useGLTF } from "@react-three/drei";
+import { Detailed, Line, OrbitControls, PerformanceMonitor, useGLTF } from "@react-three/drei";
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber";
-import { Bloom, DepthOfField, EffectComposer, N8AO } from "@react-three/postprocessing";
+import { Bloom, EffectComposer, N8AO } from "@react-three/postprocessing";
 import {
   ACESFilmicToneMapping,
   BufferAttribute,
@@ -14,12 +14,13 @@ import {
   Mesh,
   MeshStandardMaterial,
   Object3D,
-  PCFShadowMap,
+  PCFSoftShadowMap,
   PlaneGeometry,
   PointLight,
   Points,
   PointsMaterial,
   SRGBColorSpace,
+  TOUCH,
   Vector3,
 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -36,8 +37,8 @@ type SceneProps = {
 
 type VectorTuple = [number, number, number];
 
-const EARTH = new Color("#8c6748");
-const GRASS = new Color("#6e7954");
+const EARTH = new Color("#b9a783");
+const GRASS = new Color("#667357");
 const HOUSE_WIDTH = 10;
 const HOUSE_DEPTH = 7;
 
@@ -200,7 +201,7 @@ function TrenchesAndFootings({
         >
           <mesh castShadow receiveShadow>
             <boxGeometry args={[piece.size[0], 0.32, piece.size[2]]} />
-            <meshStandardMaterial color="#aaa69b" roughness={0.92} />
+            <meshStandardMaterial color="#d7d3ca" roughness={0.92} />
           </mesh>
         </BuildPart>
       ))}
@@ -275,7 +276,7 @@ function FoundationAndSlab({
       >
         <mesh castShadow receiveShadow>
           <boxGeometry args={[9.72, 0.28, 6.72]} />
-          <meshStandardMaterial color="#b7b0a2" roughness={0.78} />
+          <meshStandardMaterial color="#d7d3ca" roughness={0.78} />
         </mesh>
       </BuildPart>
     </group>
@@ -352,7 +353,7 @@ function WallMesh({ position, size }: { position: VectorTuple; size: VectorTuple
   return (
     <mesh position={position} castShadow receiveShadow>
       <boxGeometry args={size} />
-      <meshStandardMaterial color="#bd8057" roughness={0.83} metalness={0.01} />
+      <meshStandardMaterial color="#c9673d" roughness={0.84} metalness={0.01} />
     </mesh>
   );
 }
@@ -387,7 +388,7 @@ function OpeningInfill({
         >
           <mesh castShadow receiveShadow>
             <boxGeometry args={fill.size} />
-            <meshStandardMaterial color="#b47751" roughness={0.9} />
+            <meshStandardMaterial color="#b95b35" roughness={0.9} />
           </mesh>
         </BuildPart>
       ))}
@@ -560,7 +561,7 @@ function RoofSheet({ side }: { side: "left" | "right" }) {
   return (
     <mesh position={[direction * 2.52, 4.31, 0]} rotation-z={direction * -0.31} castShadow receiveShadow>
       <boxGeometry args={[5.36, 0.12, 7.55, 14, 1, 14]} />
-      <meshStandardMaterial color="#6f6254" roughness={0.42} metalness={0.38} />
+      <meshStandardMaterial color="#292b28" roughness={0.48} metalness={0.28} />
     </mesh>
   );
 }
@@ -900,12 +901,12 @@ function SceneLighting({ stageIndex, lowQuality }: { lowQuality: boolean; stageI
   });
   return (
     <>
-      <hemisphereLight color="#ffd9a8" groundColor="#4e4c3a" intensity={1.35} />
+      <hemisphereLight color="#eef7fa" groundColor="#b9a783" intensity={1.5} />
       <directionalLight
         ref={sun}
         position={[-10, 16, 9]}
-        color="#ffd19a"
-        intensity={3.6}
+        color="#fff4e3"
+        intensity={3.15}
         castShadow
         shadow-mapSize-width={lowQuality ? 1024 : 2048}
         shadow-mapSize-height={lowQuality ? 1024 : 2048}
@@ -919,19 +920,6 @@ function SceneLighting({ stageIndex, lowQuality }: { lowQuality: boolean; stageI
       />
     </>
   );
-}
-
-function SunsetEnvironment() {
-  const [file, setFile] = useState<string | null>(null);
-  useEffect(() => {
-    let active = true;
-    import("@pmndrs/assets/hdri/sunset.exr.js").then((module) => {
-      if (active) setFile(module.default);
-    });
-    return () => { active = false; };
-  }, []);
-  if (!file) return null;
-  return <Environment files={file} background={false} />;
 }
 
 const cameraFrames = [
@@ -949,8 +937,11 @@ const cameraFrames = [
   { position: [15.4, 9.2, 15.8] as VectorTuple, target: [0, 1.8, 0] as VectorTuple },
 ];
 
+const isCoarsePointer = () => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+
 function CameraRig({ reduceMotion, stageIndex }: Pick<SceneProps, "reduceMotion" | "stageIndex">) {
   const controls = useRef<OrbitControlsImpl>(null);
+  const coarse = useMemo(() => isCoarsePointer(), []);
   const { camera } = useThree();
   const [autoOrbit, setAutoOrbit] = useState(!reduceMotion);
   const reframing = useRef(true);
@@ -990,6 +981,7 @@ function CameraRig({ reduceMotion, stageIndex }: Pick<SceneProps, "reduceMotion"
       enablePan
       enableRotate
       enableZoom
+      touches={coarse ? { ONE: -1 as unknown as TOUCH, TWO: TOUCH.DOLLY_ROTATE } : undefined}
       minDistance={7}
       maxDistance={29}
       minPolarAngle={0.35}
@@ -1024,9 +1016,8 @@ function SceneContent({
 
   return (
     <>
-      <color attach="background" args={[stageIndex >= 11 ? "#8c775f" : "#b79775"]} />
-      <fog attach="fog" args={[stageIndex >= 11 ? "#8c775f" : "#b79775", 20, 48]} />
-      <Suspense fallback={null}><SunsetEnvironment /></Suspense>
+      <color attach="background" args={["#e8f0f2"]} />
+      <fog attach="fog" args={["#e8f0f2", 24, 52]} />
       <SceneLighting stageIndex={stageIndex} lowQuality={lowQuality} />
       <Terrain stageIndex={stageIndex} />
       <SurveyAndFootprint stageIndex={stageIndex} reduceMotion={reduceMotion} stageStartedAt={stageStartedAt} />
@@ -1053,7 +1044,6 @@ function SceneContent({
       ) : (
         <EffectComposer multisampling={4} enabled>
           <N8AO aoRadius={2.2} intensity={1.15} quality="medium" halfRes />
-          <DepthOfField focusDistance={0.025} focalLength={0.08} bokehScale={0.65} />
           <Bloom intensity={0.22} luminanceThreshold={1.25} mipmapBlur />
         </EffectComposer>
       )}
@@ -1062,12 +1052,13 @@ function SceneContent({
 }
 
 export default function EdenImpactScene(props: SceneProps) {
-  const [lowQuality, setLowQuality] = useState(false);
+  const coarse = useMemo(() => isCoarsePointer(), []);
+  const [lowQuality, setLowQuality] = useState(coarse);
   return (
     <Canvas
       camera={{ position: [13.5, 8.5, 14], fov: 38, near: 0.1, far: 100 }}
-      dpr={lowQuality ? 1 : [1, 1.55]}
-      shadows={{ type: PCFShadowMap }}
+      dpr={lowQuality ? (coarse ? [1, 1.35] : 1) : [1, 1.75]}
+      shadows={{ type: PCFSoftShadowMap }}
       gl={{ antialias: !lowQuality, toneMapping: ACESFilmicToneMapping, outputColorSpace: SRGBColorSpace }}
       onCreated={({ gl }) => { gl.toneMappingExposure = 1.03; }}
       onPointerMissed={() => { document.body.style.cursor = "auto"; }}
