@@ -29,10 +29,12 @@ test("server-renders the campaign home page", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>[^<]*Move4Impact[^<]*<\/title>/i);
-  assert.match(html, /CLIMB A<br\/>MOUNTAIN\./);
+  assert.match(html, /<span>CLIMB A<\/span><span>MOUNTAIN\.<\/span>/);
   assert.match(html, /BUILD A HOME\./);
   assert.match(html, /class="campaign-site"/);
-  assert.match(html, /id="living-impact"/);
+  assert.match(html, /id="route"/);
+  assert.match(html, /id="gift"/);
+  assert.match(html, /id="community"/);
   assert.match(html, /aria-label="Primary navigation"/);
 });
 
