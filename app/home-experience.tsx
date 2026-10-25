@@ -7,14 +7,13 @@ import ChallengeBuilder from "./challenge-builder";
 import { useCampaignStats } from "./campaign-stats";
 import GiftCalculator from "./gift-calculator";
 import KiliRoute from "./kili-route";
-import LivingImpactVisualizer from "./living-impact-visualizer";
 import { DonationDrawer, Footer, LiveTotal, MobileGiveBar, PartnerForm, partnerTiers, SiteHeader } from "./site-ui";
 import TeamRoster from "./team-roster";
 
 const heroJumps = [
   ["01", "Trace the route", "0 → 5,895 m", "#route"],
   ["02", "Size your gift", "Dollars into altitude", "#gift"],
-  ["03", "Build a home in 3D", "Watch it rise", "#living-impact"],
+  ["03", "Meet the climbers", "Live from Givebutter", "#team"],
   ["04", "Start your challenge", "Make a share card", "#community"],
 ] as const;
 
@@ -42,7 +41,6 @@ function useReveal() {
 export default function HomeExperience() {
   const [donationOpen, setDonationOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [preview, setPreview] = useState<{ amount: number; key: number }>();
   const [partnerTier, setPartnerTier] = useState<string>("ASCENT");
   const stats = useCampaignStats();
 
@@ -149,9 +147,7 @@ export default function HomeExperience() {
         </div>
       </section>
 
-      <GiftCalculator stats={stats} onPreview={(amount) => setPreview({ amount, key: Date.now() })} />
-
-      <LivingImpactVisualizer onDonate={() => setDonationOpen(true)} preview={preview} />
+      <GiftCalculator stats={stats} />
 
       <TeamRoster stats={stats} />
 

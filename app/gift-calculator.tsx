@@ -20,7 +20,7 @@ const fromSlider = (position: number) => {
   return Math.max(MIN, Math.round(raw / step) * step);
 };
 
-export default function GiftCalculator({ stats, onPreview }: { stats: CampaignStats | null; onPreview: (amount: number) => void }) {
+export default function GiftCalculator({ stats }: { stats: CampaignStats | null }) {
   const [amount, setAmount] = useState(100);
   const [monthly, setMonthly] = useState(false);
   const yearly = monthly ? amount * 12 : amount;
@@ -102,9 +102,6 @@ export default function GiftCalculator({ stats, onPreview }: { stats: CampaignSt
             <a className="button button--orange" href={givingUrl} target="_blank" rel="noopener noreferrer">
               Give {formatUsd(amount)}{monthly ? "/mo" : ""} on Givebutter <span aria-hidden="true">↗</span>
             </a>
-            <button className="text-link" type="button" onClick={() => onPreview(yearly)}>
-              See what it builds in 3D <span aria-hidden="true">↓</span>
-            </button>
           </div>
         </div>
       </div>
