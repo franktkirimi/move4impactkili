@@ -334,3 +334,52 @@
   .mark__copy { display: none; }
 }
 .site-header { grid-template-columns: auto minmax(0, 1fr) auto; gap: 24px; }
+
+/* ---------- Phones: no swiping, everything stacks ---------- */
+.climber-card__name { display: none; }
+@media (max-width: 760px) {
+  .section-dark, .section-light, .section-glacier, .section-blue, .section-orange { padding-top: 84px; padding-bottom: 84px; }
+
+  /* Hero: shortcut tiles sit in the flow as a 2×2 grid instead of a swipe strip */
+  .hero { min-height: auto; padding-bottom: 0; }
+  .hero__jumps { position: static; display: grid; grid-template-columns: 1fr 1fr; width: auto; margin: 40px calc(var(--pad) * -1) 0; overflow: visible; }
+  .hero__jumps a { flex: none; min-height: 96px; padding: 16px; column-gap: 8px; border-right: 1px solid rgba(255,255,255,.14) !important; border-bottom: 1px solid rgba(255,255,255,.14) !important; }
+  .hero__jumps a:nth-child(2n) { border-right: 0 !important; }
+  .hero__jumps a:nth-child(n+3) { border-bottom: 0 !important; }
+  .hero__jumps b { font-size: 18px; }
+  .hero__jumps small { font-size: 9px; }
+  .hero__jumps i { display: none; }
+
+  /* Route chart: larger labels so they stay readable at phone scale */
+  .kili__grid text { display: none; }
+  .kili__camp text { font-size: 30px; }
+  .kili__team text { font-size: 32px; }
+
+  /* Climbers: compact leaderboard rows instead of a carousel */
+  .climber-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 40px 0 0; padding: 0; overflow: visible; }
+  .climber-card { display: grid; grid-template-columns: 104px minmax(0, 1fr); flex: none; }
+  .climber-card__visual { aspect-ratio: auto; min-height: 100%; }
+  .climber-card__visual::before, .climber-card__visual > b, .climber-card__index { display: none; }
+  .climber-card__initials { font-size: 38px; }
+  .climber-card__rank { top: 8px; right: auto; left: 8px; padding: 4px 6px; font-size: 7px; }
+  .climber-card__content { padding: 14px; }
+  .climber-card__name { display: block; margin: 0 0 2px; font: 900 22px/.95 var(--display); letter-spacing: -.02em; text-transform: uppercase; }
+  .climber-card__content > span, .climber-card__content > p { display: none; }
+  .climber-card__metrics { margin: 10px 0 12px; }
+  .climber-card__metrics div { padding: 8px 4px 8px 0; }
+  .climber-card__metrics b { font-size: 18px; }
+  .climber-card__progress { margin: -2px 0 12px; }
+  .climber-card__view { min-height: 40px; padding: 0 12px; font-size: 9px; }
+  .climber-card__share { flex-basis: 40px; height: 40px; }
+  .team__footer { gap: 12px; margin-top: 22px; }
+
+  /* Footer: tighter columns so the link lists fit on 360px screens */
+  .footer__top { gap: 32px 20px; }
+  .footer__links { font-size: 11px; }
+
+  /* Partner levels: 2×2 grid */
+  .partner-tiers { display: grid; grid-template-columns: 1fr 1fr; margin-top: 40px; overflow: visible; }
+  .partner-tier { flex: none; min-height: 0; padding: 16px; }
+  .partner-tier h3 { margin: 22px 0 6px; font-size: 24px; }
+  .partner-tier p { margin: 10px 0 16px; font-size: 11px; }
+}

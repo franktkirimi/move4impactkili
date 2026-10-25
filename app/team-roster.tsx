@@ -111,6 +111,7 @@ export default function TeamRoster({ stats }: { stats: CampaignStats | null }) {
               </a>
               {live && index < 3 && card.raised ? <span className="climber-card__rank">#{index + 1} fundraiser</span> : null}
               <div className="climber-card__content">
+                <h3 className="climber-card__name">{card.name}</h3>
                 <span>{card.location}</span>
                 <p>{card.reason}</p>
                 <div className="climber-card__metrics">
