@@ -120,7 +120,7 @@ const hotspotCopy: Record<ImpactHotspot, { label: string; title: string; detail:
 
 const formatAmount = (amount: number) => `$${amount.toLocaleString("en-US")}`;
 
-export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => void }) {
+export default function LivingImpactVisualizer({ onDonate, preview }: { onDonate: () => void; preview?: { amount: number; key: number } }) {
   const [stageIndex, setStageIndex] = useState(4);
   const [settled, setSettled] = useState(true);
   const [selectedHotspot, setSelectedHotspot] = useState<ImpactHotspot | null>(null);
@@ -160,6 +160,22 @@ export default function LivingImpactVisualizer({ onDonate }: { onDonate: () => v
     setSettled(false);
     setStageIndex(nextStage);
   };
+
+  // A gift chosen in the calculator jumps to the furthest stage it fully covers.
+  const [seenPreview, setSeenPreview] = useState(preview);
+  if (preview !== seenPreview) {
+    setSeenPreview(preview);
+    if (preview) {
+      setSelectedHotspot(null);
+      setSettled(false);
+      setStageIndex(stages.reduce((best, item, index) => (preview.amount >= item.amount ? index : best), 0));
+      setSceneReady(true);
+    }
+  }
+
+  useEffect(() => {
+    if (preview) section.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [preview]);
 
   const sceneDescription = useMemo(
     () => `${formatAmount(stage.amount)} selected. ${stage.label}. ${stage.detail}`,

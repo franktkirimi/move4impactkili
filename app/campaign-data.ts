@@ -1,5 +1,7 @@
 export type Climber = {
   slug: string;
+  /** Campaign member id on Givebutter, used to attach live totals to this profile. */
+  givebutterId?: string;
   name: string;
   location: string;
   reason: string;
@@ -17,6 +19,7 @@ export type Climber = {
 export const climbers: Climber[] = [
   {
     slug: "ian-fry",
+    givebutterId: "744447",
     name: "Ian Fry",
     location: "Move4Impact athlete",
     reason: "Personal story and fundraising target publishing soon.",
@@ -32,6 +35,7 @@ export const climbers: Climber[] = [
   },
   {
     slug: "skylar-fingerle",
+    givebutterId: "753630",
     name: "Skylar Fingerle",
     location: "Move4Impact athlete",
     reason: "Personal story and fundraising target publishing soon.",
@@ -47,6 +51,7 @@ export const climbers: Climber[] = [
   },
   {
     slug: "frank-kirimi",
+    givebutterId: "711525",
     name: "Frank Kirimi",
     location: "Harare, Zimbabwe",
     reason: "I’m climbing so that a hard-won summit can become an everyday place of safety and belonging.",
@@ -59,18 +64,6 @@ export const climbers: Climber[] = [
     image: "/images/frank-kirimi.jpg",
     imageAlt: "Frank Kirimi smiling during trail training in Zimbabwe",
     imagePosition: "50% 50%",
-  },
-  {
-    slug: "climber-04",
-    name: "[Climber 04]",
-    location: "[City, country]",
-    reason: "[Approved personal reason for climbing]",
-    target: "[Personal target]",
-    raised: "[Amount raised]",
-    trained: "[KM trained]",
-    elevation: "[Elevation gained]",
-    update: "[Latest verified training update]",
-    accent: "lime",
   },
 ];
 
@@ -169,3 +162,5 @@ export const altitudeStages = [
 /** Verified Givebutter campaign for Move4Impact · Kilimanjaro 2027 (Eden Ministries Inc). */
 export const givingUrl = "https://givebutter.com/kilimanjaro2027";
 export const givebutterAccount = "226906";
+/** Givebutter campaign id for "Move4Impact- Kilimanjaro 2027", used by /api/campaign. */
+export const givebutterCampaignId = 590027;
